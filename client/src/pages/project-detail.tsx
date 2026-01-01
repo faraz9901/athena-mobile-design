@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -19,8 +19,10 @@ import {
   Plus,
   Building2
 } from "lucide-react";
+
 import { Link, useRoute } from "wouter";
-import { cn } from "@/lib/utils";
+import ProjectWorkflow, { WorkflowStatus } from "@/components/ProjectWorkflow";
+
 
 export default function ProjectDetail() {
   const [match, params] = useRoute("/project/:id");
@@ -46,7 +48,7 @@ export default function ProjectDetail() {
   };
 
   return (
-    <MobileLayout fabAction={() => { }} fabIcon={<Plus className="h-6 w-6" />}>
+    <MobileLayout showBottomNav={false} fabAction={() => { }} fabIcon={<Plus className="h-6 w-6" />}>
       {/* Header Area */}
       <div className="bg-primary text-primary-foreground pt-8 pb-6 px-5 rounded-b-[2rem] shadow-lg relative z-10">
         <div className="flex justify-between items-start mb-4">
@@ -103,9 +105,9 @@ export default function ProjectDetail() {
 
       {/* Tabs Content */}
       <div className="px-5 mt-4">
-        <Tabs defaultValue="overview" className="w-full">
+        <Tabs defaultValue="workflow" className="w-full">
           <TabsList className="w-full grid grid-cols-4 bg-transparent p-0 gap-2 h-auto mb-4">
-            {["Overview", "Files", "Report", "Analytics"].map((tab) => (
+            {["Workflow", "Files", "Report", "Analytics"].map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab.toLowerCase()}
@@ -116,54 +118,8 @@ export default function ProjectDetail() {
             ))}
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="border-none shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Project Milestones</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[
-                  { title: "Bid Submission", date: "15 Jan 2025", status: "completed" },
-                  { title: "Site Handover", date: "01 Feb 2025", status: "completed" },
-                  { title: "Foundation Work", date: "20 Mar 2025", status: "current" },
-                  { title: "Structure Completion", date: "15 Jun 2025", status: "pending" },
-                ].map((milestone, i) => (
-                  <div key={i} className="flex gap-3 relative">
-                    {i !== 3 && <div className="absolute left-[9px] top-6 bottom-[-8px] w-[2px] bg-secondary" />}
-                    <div className={cn(
-                      "h-5 w-5 rounded-full border-2 z-10 flex items-center justify-center shrink-0 bg-background",
-                      milestone.status === "completed" ? "border-primary bg-primary" :
-                        milestone.status === "current" ? "border-primary" : "border-muted"
-                    )}>
-                      {milestone.status === "completed" && <div className="h-2 w-2 bg-white rounded-full" />}
-                      {milestone.status === "current" && <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />}
-                    </div>
-                    <div>
-                      <h4 className={cn("text-sm font-medium leading-none", milestone.status === "pending" && "text-muted-foreground")}>
-                        {milestone.title}
-                      </h4>
-                      <p className="text-xs text-muted-foreground mt-1">{milestone.date}</p>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="border-none shadow-sm">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Quick Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Pending Tasks</p>
-                  <p className="text-xl font-bold">14</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Docs Pending</p>
-                  <p className="text-xl font-bold text-orange-600">3</p>
-                </div>
-              </CardContent>
-            </Card>
+          <TabsContent value="workflow" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <ProjectWorkflow projectId={projectId} projectStatus={project.status as WorkflowStatus} />
           </TabsContent>
 
           <TabsContent value="files" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -405,3 +361,4 @@ export default function ProjectDetail() {
     </MobileLayout>
   );
 }
+

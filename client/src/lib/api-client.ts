@@ -17,6 +17,8 @@ export interface User {
     name?: string;
     occupation?: string;
     onboardingCompleted: boolean;
+    isNewUser?: boolean;
+    emailVerified?: boolean;
     createdAt: number;
 }
 
@@ -72,7 +74,7 @@ export const api = {
         async verifyOtp(
             phone: string,
             otp: string
-        ): Promise<{ success: boolean; user?: User; token?: string; error?: string }> {
+        ): Promise<{ success: boolean; user?: User; token?: string; error?: string; isNewUser?: boolean }> {
             await new Promise((r) => setTimeout(r, 800));
 
             if (otp !== '123456') {
@@ -83,15 +85,26 @@ export const api = {
 
             /* Find or create user */
             let user = await db.getFromIndex(STORE_USERS, 'phone', phone);
+            let isNewUser = false;
 
             if (!user) {
+                isNewUser = true;
                 user = {
                     id: crypto.randomUUID(),
                     phone,
                     onboardingCompleted: false,
+                    isNewUser: true,
                     createdAt: Date.now(),
                 };
                 await db.put(STORE_USERS, user);
+            } else {
+                // If previously created but didn't finish onboarding/setup, might strictly still be "new" conceptually, 
+                // but for this flow let's rely on the DB existence or a specific flag.
+                // For now, if they exist in DB, they aren't "new" for the purpose of showing the email input AGACIN,
+                // UNLESS they haven't provided an email yet.
+                if (!user.email) {
+                    isNewUser = true;
+                }
             }
 
             /* Create / overwrite current session */
@@ -106,7 +119,18 @@ export const api = {
 
             await db.put(STORE_SESSION, session);
 
-            return { success: true, user, token };
+            return { success: true, user, token, isNewUser };
+        },
+
+        async verifyEmailOtp(email: string, otp: string): Promise<boolean> {
+            await new Promise((r) => setTimeout(r, 800));
+            if (otp === '123456') return true;
+            return false;
+        },
+
+        async googleMockAuth(email: string): Promise<boolean> {
+            await new Promise((r) => setTimeout(r, 800));
+            return true; // Always succeed for mock
         },
 
         /* =======================

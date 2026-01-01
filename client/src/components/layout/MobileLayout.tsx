@@ -13,9 +13,10 @@ interface MobileLayoutProps {
   sidebarOpen?: boolean;
   sidebarContent?: React.ReactNode;
   onCloseSidebar?: () => void;
+  showBottomNav?: boolean;
 }
 
-export function MobileLayout({ children, title, showProfile = false, fabAction, fabIcon, sidebarOpen, sidebarContent, onCloseSidebar }: MobileLayoutProps) {
+export function MobileLayout({ children, title, showProfile = false, fabAction, fabIcon, sidebarOpen, sidebarContent, onCloseSidebar, showBottomNav = true }: MobileLayoutProps) {
   const [location] = useLocation();
 
   const navItems = [
@@ -61,33 +62,35 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
       )} */}
 
       {/* Bottom Navigation */}
-      <nav className={cn(location.includes("project/") ? "hidden" : "fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-border/40 z-40 max-w-md mx-auto")}>
-        <div className="flex items-center justify-around h-16 px-2">
-          {navItems.map((item) => {
-            const isActive = location === item.href;
-            return (
-              <Link key={item.href} href={item.href}>
-                <a className="flex flex-col items-center justify-center w-full h-full space-y-1 group">
-                  <div className={cn(
-                    "px-4 py-1 rounded-full transition-all duration-300",
-                    isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground group-hover:text-foreground"
-                  )}>
-                    <item.icon className={cn("h-5 w-5", isActive && "stroke-[2.5px]")} />
-                  </div>
-                  <span className={cn(
-                    "text-[10px] font-medium transition-colors",
-                    isActive ? "text-primary" : "text-muted-foreground"
-                  )}>
-                    {item.label}
-                  </span>
-                </a>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {showBottomNav && (
+        <nav className={cn("fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-border/40 z-40 max-w-md mx-auto")}>
+          <div className="flex items-center justify-around h-16 px-2">
+            {navItems.map((item) => {
+              const isActive = location === item.href;
+              return (
+                <Link key={item.href} href={item.href}>
+                  <a className="flex flex-col items-center justify-center w-full h-full space-y-1 group">
+                    <div className={cn(
+                      "px-4 py-1 rounded-full transition-all duration-300",
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground group-hover:text-foreground"
+                    )}>
+                      <item.icon className={cn("h-5 w-5", isActive && "stroke-[2.5px]")} />
+                    </div>
+                    <span className={cn(
+                      "text-[10px] font-medium transition-colors",
+                      isActive ? "text-primary" : "text-muted-foreground"
+                    )}>
+                      {item.label}
+                    </span>
+                  </a>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

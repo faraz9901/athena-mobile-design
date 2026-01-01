@@ -10,24 +10,31 @@ import { api } from "@/lib/api-client";
 
 export default function Login() {
     const [, navigate] = useLocation();
-    const { login, user } = useAuth();
-    const [step, setStep] = useState<"phone" | "otp">("phone");
+    const { login, user, verifyEmail, googleLogin } = useAuth();
+    const [step, setStep] = useState<"phone" | "otp" | "email" | "email-otp">("phone");
     const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
     const [generatedOtp, setGeneratedOtp] = useState("");
     const [otpInput, setOtpInput] = useState("");
+    const [emailOtpInput, setEmailOtpInput] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
+    // If we land here and user is already logged in
     useEffect(() => {
         if (user) {
-            if (!user.onboardingCompleted) {
-                navigate("/register");
-            } else {
+            if (user.onboardingCompleted) {
                 navigate("/");
+            } else if (user.isNewUser && !user.emailVerified) {
+                // Remain on Login page, force Email step
+                setStep("email");
+            } else {
+                // Logged in, email verified (or old user), but not onboarded
+                navigate("/register");
             }
         }
+    }, [user, navigate]);
 
-    }, [user, navigate])
 
     async function handleRequestOtp(e: React.FormEvent) {
         e.preventDefault();
@@ -37,7 +44,6 @@ export default function Login() {
             return;
         } try {
             await api.auth.sendOtp(phone);
-            // Mock OTP generation for display/demo purposes (in real app, this is server-side)
             const mock = "123456";
             setGeneratedOtp(mock);
             setStep("otp");
@@ -51,21 +57,77 @@ export default function Login() {
         setError(null);
         setSubmitting(true);
         try {
-            await login(phone, otpInput);
-            // Navigation handled by useEffect
+            const loggedInUser = await login(phone, otpInput);
+
+            if (loggedInUser?.isNewUser && !loggedInUser.emailVerified) {
+                setStep("email");
+            } else {
+                // Navigation handled by useEffect
+            }
         } catch (err: any) {
             console.log(error)
             setError(err.message || "Invalid OTP");
+            setSubmitting(false);
+            return;
+        }
+        setSubmitting(false);
+    }
+
+    async function handleEmailRequest(e: React.FormEvent) {
+        e.preventDefault();
+        if (!email || !email.includes("@")) {
+            setError("Invalid email");
+            return;
+        }
+        // Mock sending Email OTP
+        setStep("email-otp");
+        setGeneratedOtp("123456");
+        setError(null);
+    }
+
+    async function handleVerifyEmailOtp(e: React.FormEvent) {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            const success = await verifyEmail(email, emailOtpInput);
+            if (success) {
+                navigate("/register");
+            } else {
+                setError("Invalid Email OTP");
+            }
+        } catch (e) {
+            setError("Verification failed");
         } finally {
             setSubmitting(false);
-            navigate("/", { replace: true });
+        }
+    }
+
+    async function handleGoogleAuth() {
+        if (!email) {
+            setError("Enter email to link Google");
+            // Or typically Google auth gets the email, but flow request said "in email input also show verify with google"
+            // Assuming we use the input email or just simulate a flow.
+            // Let's assume we proceed with the typed email if present, or just mock it.
+        }
+        setSubmitting(true);
+        try {
+            const success = await googleLogin(email || "user@gmail.com");
+            if (success) {
+                navigate("/register");
+            } else {
+                setError("Google Auth failed");
+            }
+        } catch (e) {
+            setError("Auth failed");
+        } finally {
+            setSubmitting(false);
         }
     }
 
 
     return (
-        <MobileLayout>
-            <div className="px-5 py-10 space-y-6">
+        <MobileLayout showBottomNav={false}>
+            <div className="px-5 py-10 space-y-6 h-[calc(100vh-10rem)] flex flex-col justify-center">
                 <Card className="border-none shadow-sm">
                     <CardHeader>
                         <CardTitle className="text-xl font-bold">Welcome to Athena</CardTitle>
@@ -141,6 +203,80 @@ export default function Login() {
                                     disabled={otpInput.length !== 6 || submitting}
                                 >
                                     {submitting ? "Verifying..." : "Continue"}
+                                </Button>
+                            </form>
+                        )}
+                        {step === "email" && (
+                            <form className="space-y-4" onSubmit={handleEmailRequest}>
+                                <div className="space-y-1">
+                                    <label className="text-sm font-medium">Email Address</label>
+                                    <Input
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Required for new accounts.
+                                    </p>
+                                </div>
+                                {error && <p className="text-xs text-destructive">{error}</p>}
+                                <Button type="submit" className="w-full rounded-xl">
+                                    Verify Email
+                                </Button>
+                                <div className="relative">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <span className="w-full border-t" />
+                                    </div>
+                                    <div className="relative flex justify-center text-xs uppercase">
+                                        <span className="bg-background px-2 text-muted-foreground">
+                                            Or continue with
+                                        </span>
+                                    </div>
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full rounded-xl"
+                                    onClick={handleGoogleAuth}
+                                >
+                                    Verify with Google
+                                </Button>
+                            </form>
+                        )}
+                        {step === "email-otp" && (
+                            <form className="space-y-4" onSubmit={handleVerifyEmailOtp}>
+                                <div className="space-y-2">
+                                    <p className="text-sm font-medium">Verify Email</p>
+                                    <p className="text-xs text-muted-foreground">Sent to {email}</p>
+                                    <div className="mt-2 space-y-1">
+                                        <p className="text-xs font-medium text-muted-foreground">Mock OTP</p>
+                                        <Badge variant="secondary" className="text-base tracking-[0.3em] px-3 py-1">
+                                            123456
+                                        </Badge>
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <Input
+                                        inputMode="numeric"
+                                        maxLength={6}
+                                        placeholder="6-digit code"
+                                        value={emailOtpInput}
+                                        onChange={(e) => setEmailOtpInput(e.target.value.replace(/\D/g, ""))}
+                                    />
+                                </div>
+                                {error && <p className="text-xs text-destructive">{error}</p>}
+                                <Button type="submit" className="w-full rounded-xl" disabled={submitting}>
+                                    {submitting ? "Verifying..." : "Complete Verification"}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="w-full"
+                                    onClick={() => setStep("email")}
+                                >
+                                    Back to Email
                                 </Button>
                             </form>
                         )}
