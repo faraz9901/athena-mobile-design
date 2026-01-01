@@ -19,9 +19,48 @@ import {
   Plus,
   Building2
 } from "lucide-react";
+import { PieChart, Pie, Cell, Tooltip } from "recharts"
 
 import { Link, useRoute } from "wouter";
 import ProjectWorkflow, { WorkflowStatus } from "@/components/ProjectWorkflow";
+
+// mockData.ts
+export const ganttData = [
+  {
+    id: 1,
+    name: "Design & Approvals",
+    start: 0,
+    baseline: 30,
+    actual: 35,
+    color: "bg-blue-500",
+    timeline: "Jan - Mar",
+  },
+  {
+    id: 2,
+    name: "Foundation & Structure",
+    start: 30,
+    baseline: 55,
+    actual: 60,
+    color: "bg-emerald-500",
+    timeline: "Mar - Aug",
+  },
+  {
+    id: 3,
+    name: "Finishes & Handover",
+    start: 65,
+    baseline: 40,
+    actual: 32,
+    color: "bg-orange-500",
+    timeline: "Sep - Dec",
+  },
+]
+
+export const pieData = [
+  { name: "Critical Path", value: 28 },
+  { name: "Dependencies", value: 22 },
+  { name: "Execution", value: 34 },
+  { name: "Reporting", value: 16 },
+]
 
 
 export default function ProjectDetail() {
@@ -284,24 +323,7 @@ export default function ProjectDetail() {
                 <Badge variant="outline" className="text-[10px] px-2 py-0.5">Baseline v/s Actual</Badge>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-3 text-xs">
-                  {[
-                    { label: "Design & Approvals", start: "Jan", end: "Mar", color: "bg-blue-500", baseline: 30, actual: 35 },
-                    { label: "Foundation & Structure", start: "Mar", end: "Aug", color: "bg-emerald-500", baseline: 55, actual: 60 },
-                    { label: "Finishes & Handover", start: "Sep", end: "Dec", color: "bg-orange-500", baseline: 40, actual: 32 },
-                  ].map((phase, idx) => (
-                    <div key={idx} className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-xs">{phase.label}</span>
-                        <span className="text-[10px] text-muted-foreground">{phase.start} - {phase.end}</span>
-                      </div>
-                      <div className="relative h-4 rounded-full bg-secondary/60 overflow-hidden">
-                        <div className={`absolute inset-y-0 left-0 ${phase.color} opacity-40`} style={{ width: `${phase.baseline}%` }} />
-                        <div className={`absolute inset-y-0 left-0 ${phase.color}`} style={{ width: `${phase.actual}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <GanttChart />
               </CardContent>
             </Card>
 
@@ -311,46 +333,7 @@ export default function ProjectDetail() {
                 <CardDescription className="text-xs mt-1">Where the team is spending time</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center gap-4">
-                  <div className="relative h-20 w-20">
-                    <div className="absolute inset-0 rounded-full bg-secondary" />
-                    <div className="absolute inset-[4px] rounded-full bg-gradient-to-tr from-orange-400 via-primary to-emerald-400" />
-                    <div className="absolute inset-[11px] rounded-full bg-background flex flex-col items-center justify-center text-[10px] font-medium">
-                      <span>Critical</span>
-                      <span className="text-xs font-bold">28%</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-red-500" />
-                      <div className="flex-1 flex justify-between">
-                        <span>Critical path</span>
-                        <span className="font-medium">28%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-amber-400" />
-                      <div className="flex-1 flex justify-between">
-                        <span>Dependencies</span>
-                        <span className="font-medium">22%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                      <div className="flex-1 flex justify-between">
-                        <span>Execution</span>
-                        <span className="font-medium">34%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-sky-400" />
-                      <div className="flex-1 flex justify-between">
-                        <span>Reporting</span>
-                        <span className="font-medium">16%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <RiskPieChart />
               </CardContent>
             </Card>
           </TabsContent>
@@ -362,3 +345,77 @@ export default function ProjectDetail() {
   );
 }
 
+
+function GanttChart() {
+  return (
+    <div className="space-y-4">
+      {ganttData.map((phase) => (
+        <div key={phase.id} className="space-y-1">
+          <div className="flex justify-between text-xs">
+            <span className="font-medium">{phase.name}</span>
+            <span className="text-muted-foreground">{phase.timeline}</span>
+          </div>
+
+          <div className="relative h-4 rounded-full bg-secondary overflow-hidden">
+            {/* Baseline */}
+            <div
+              className={`absolute inset-y-0 ${phase.color} opacity-40`}
+              style={{
+                left: `${phase.start}%`,
+                width: `${phase.baseline}%`,
+              }}
+            />
+
+            {/* Actual */}
+            <div
+              className={`absolute inset-y-0 ${phase.color}`}
+              style={{
+                left: `${phase.start}%`,
+                width: `${phase.actual}%`,
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const COLORS = ["#ef4444", "#f59e0b", "#10b981", "#38bdf8"]
+
+function RiskPieChart() {
+  return (
+    <div className="flex items-center gap-6">
+      <PieChart width={120} height={120}>
+        <Pie
+          data={pieData}
+          dataKey="value"
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius={38}
+          outerRadius={55}
+          paddingAngle={3}
+        >
+          {pieData.map((_, index) => (
+            <Cell key={index} fill={COLORS[index]} />
+          ))}
+        </Pie>
+        <Tooltip />
+      </PieChart>
+
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        {pieData.map((item, idx) => (
+          <div key={item.name} className="flex items-center gap-2">
+            <span
+              className="h-2 w-2 rounded-full"
+              style={{ backgroundColor: COLORS[idx] }}
+            />
+            <span className="flex-1">{item.name}</span>
+            <span className="font-medium">{item.value}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

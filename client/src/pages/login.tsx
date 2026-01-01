@@ -103,12 +103,6 @@ export default function Login() {
     }
 
     async function handleGoogleAuth() {
-        if (!email) {
-            setError("Enter email to link Google");
-            // Or typically Google auth gets the email, but flow request said "in email input also show verify with google"
-            // Assuming we use the input email or just simulate a flow.
-            // Let's assume we proceed with the typed email if present, or just mock it.
-        }
         setSubmitting(true);
         try {
             const success = await googleLogin(email || "user@gmail.com");
