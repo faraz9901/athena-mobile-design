@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { 
+import {
   User,
   Mail,
   Phone,
@@ -16,8 +16,10 @@ import {
   Crown,
   CheckCircle2,
   X,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft
 } from "lucide-react";
+import { Link } from "wouter";
 
 // Mock user data
 const mockUser = {
@@ -58,6 +60,13 @@ const planFeatures = {
 export default function Profile() {
   return (
     <MobileLayout title="Profile">
+
+      <Link href="/">
+        <Button variant="outline" size="icon" className="text-primary hover:bg-primary/80 hover:text-primary-foreground">
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+      </Link>
+
       <div className="px-5 py-6 space-y-6">
         {/* Profile Header */}
         <Card className="border-none shadow-sm bg-gradient-to-br from-primary/10 to-primary/5">
@@ -119,7 +128,7 @@ export default function Profile() {
                   </span>
                 </div>
                 <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-primary rounded-full"
                     style={{ width: `${(mockUser.plan.projects / mockUser.plan.maxProjects) * 100}%` }}
                   />
@@ -134,7 +143,7 @@ export default function Profile() {
                   </span>
                 </div>
                 <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-primary rounded-full"
                     style={{ width: `${(mockUser.plan.storage / mockUser.plan.maxStorage) * 100}%` }}
                   />
@@ -224,8 +233,8 @@ export default function Profile() {
         </Card>
 
         {/* Logout */}
-        <Button 
-          variant="destructive" 
+        <Button
+          variant="destructive"
           className="w-full rounded-xl"
         >
           <LogOut className="mr-2 h-4 w-4" />

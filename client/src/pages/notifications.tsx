@@ -123,7 +123,7 @@ export default function Notifications() {
   return (
     <MobileLayout title="Notifications">
       <Link href="/">
-        <Button size="icon" variant={"outline"} className="border-0 shadow-none">
+        <Button variant="outline" size="icon" className="text-primary hover:bg-primary/80 hover:text-primary-foreground">
           <ArrowLeft className="h-6 w-6" />
         </Button>
       </Link>

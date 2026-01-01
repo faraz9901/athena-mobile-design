@@ -10,9 +10,12 @@ interface MobileLayoutProps {
   showProfile?: boolean;
   fabAction?: () => void;
   fabIcon?: React.ReactNode;
+  sidebarOpen?: boolean;
+  sidebarContent?: React.ReactNode;
+  onCloseSidebar?: () => void;
 }
 
-export function MobileLayout({ children, title, showProfile = false, fabAction, fabIcon }: MobileLayoutProps) {
+export function MobileLayout({ children, title, showProfile = false, fabAction, fabIcon, sidebarOpen, sidebarContent, onCloseSidebar }: MobileLayoutProps) {
   const [location] = useLocation();
 
   const navItems = [
@@ -30,6 +33,19 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
       <main className="flex-1 overflow-y-auto pb-24 no-scrollbar">
         {children}
       </main>
+
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 flex max-w-md mx-auto">
+          <div className="w-64 max-w-[75%] bg-background border-l border-border/60 shadow-xl p-4 space-y-4">
+            {sidebarContent}
+          </div>
+          <button
+            type="button"
+            className="flex-1 bg-black/30"
+            onClick={onCloseSidebar}
+          />
+        </div>
+      )}
 
       {/* FAB - Conditional */}
       {/* {fabAction && (

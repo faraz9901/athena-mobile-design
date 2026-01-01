@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,22 +14,54 @@ import {
   FileCheck,
   Building2,
   Receipt,
-  FileText
+  FileText,
+  User,
+  BriefcaseIcon
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 
 export default function Dashboard() {
-
   const [, navigate] = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <MobileLayout fabAction={() => { }}>
+    <MobileLayout
+      sidebarOpen={sidebarOpen}
+      onCloseSidebar={() => setSidebarOpen(false)}
+      sidebarContent={(
+        <div className="space-y-4">
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Quick Actions</p>
+          </div>
+          <div className="space-y-2">
+            {[
+              { icon: Building2, label: "New Project", href: "/create-project-upload" },
+              { icon: CheckSquare, label: "Add Task", href: "/tasks" },
+              { icon: FileText, label: "Scan Doc", href: "/scan" },
+              { icon: User, label: "Profile", href: "/profile" },
+            ].map((action, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => { setSidebarOpen(false); if (action.href) { navigate(action.href); } }}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/40 text-sm"
+              >
+                <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-primary">
+                  <action.icon className="h-4 w-4" />
+                </div>
+                <span className="flex-1 text-left font-medium text-foreground">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    >
       {/* Top App Bar Area */}
       <header className="px-6 pt-8 pb-4 bg-background sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 border-2 border-white shadow-sm cursor-pointer">
+          <Avatar className="h-10 w-10 border-2 border-white shadow-sm cursor-pointer" onClick={() => setSidebarOpen(true)}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
@@ -150,30 +182,7 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* Quick Actions Grid */}
-        <section>
-          <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { icon: Building2, label: "New Project", href: "/create-project-upload" },
-              { icon: CheckSquareIcon, label: "Add Task", },
-              { icon: Receipt, label: "Add Expense", },
-              { icon: FileText, label: "Scan Doc", href: "/documents" },
-            ].map((action, i) => (
-              <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
-                <div onClick={() => action.href && navigate(action.href)} className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">
-                  <action.icon className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-medium text-center leading-tight">{action.label}</span>
-              </button>
-            ))}
-          </div>
-        </section>
       </div>
     </MobileLayout>
   );
 }
-
-// Icons helper
-function BriefcaseIcon(props: any) { return <Briefcase {...props} /> }
-function CheckSquareIcon(props: any) { return <CheckSquare {...props} /> }
