@@ -39,9 +39,9 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50">
+          {/* <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50">
             <Search className="h-5 w-5 text-muted-foreground" />
-          </Button>
+          </Button> */}
           <Button onClick={() => navigate("/notifications")} variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50 relative">
             <Bell className="h-5 w-5 text-muted-foreground" />
             <span className="absolute top-2 right-2.5 h-2 w-2 bg-destructive rounded-full border border-background"></span>

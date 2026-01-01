@@ -44,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 throw new Error(res.error || "Login failed");
             }
         } catch (error: any) {
+            console.log(error);
             toast({
                 variant: "destructive",
                 title: "Login Failed",

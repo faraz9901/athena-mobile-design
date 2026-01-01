@@ -32,7 +32,7 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
       </main>
 
       {/* FAB - Conditional */}
-      {fabAction && (
+      {/* {fabAction && (
         <div className="absolute bottom-20 right-4 z-50">
           <Button
             size="icon"
@@ -42,10 +42,10 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
             {fabIcon || <Plus className="h-6 w-6" />}
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-border/40 z-40 max-w-md mx-auto">
+      <nav className={cn(location.includes("project/") ? "hidden" : "fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-t border-border/40 z-40 max-w-md mx-auto")}>
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.map((item) => {
             const isActive = location === item.href;

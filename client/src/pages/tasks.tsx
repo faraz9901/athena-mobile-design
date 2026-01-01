@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,13 +51,16 @@ const tasks = [
 ];
 
 export default function Tasks() {
+  const projectNames = Array.from(new Set(tasks.map((t) => t.project)));
+  const [selectedProject, setSelectedProject] = useState<string>(projectNames[0] ?? "");
+
   return (
-    <MobileLayout title="Tasks" fabAction={() => {}} fabIcon={<Plus className="h-6 w-6" />}>
-       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
+    <MobileLayout title="Tasks" fabAction={() => { }} fabIcon={<Plus className="h-6 w-6" />}>
+      <div className="sticky top-0 bg-background z-20 pt-6 pb-3 px-5 space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Task Board</h1>
           <div className="flex -space-x-2">
-            {[1,2,3].map(i => (
+            {[1, 2, 3].map((i) => (
               <Avatar key={i} className="h-8 w-8 border-2 border-background">
                 <AvatarFallback className="text-[10px] bg-primary/10 text-primary">U{i}</AvatarFallback>
               </Avatar>
@@ -67,6 +70,22 @@ export default function Tasks() {
             </div>
           </div>
         </div>
+
+        {projectNames.length > 0 && (
+          <Tabs
+            value={selectedProject}
+            onValueChange={(val) => setSelectedProject(val)}
+            className="w-full"
+          >
+            <TabsList className="w-full grid grid-cols-3 mb-1 bg-secondary/30 p-1">
+              {projectNames.map((name) => (
+                <TabsTrigger key={name} value={name} className="text-xs truncate">
+                  {name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        )}
       </div>
 
       <div className="px-5 mt-2">
@@ -79,44 +98,46 @@ export default function Tasks() {
 
           {["todo", "inprogress", "done"].map((status) => (
             <TabsContent key={status} value={status} className="space-y-3 min-h-[50vh] animate-in slide-in-from-right-8 duration-300">
-              {tasks.filter(t => t.status === status).length === 0 ? (
+              {tasks.filter((t) => t.status === status && t.project === selectedProject).length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 text-muted-foreground border-2 border-dashed border-border/50 rounded-xl">
                   <p className="text-sm">No tasks in this column</p>
                 </div>
               ) : (
-                tasks.filter(t => t.status === status).map((task) => (
-                  <Card key={task.id} className="border-none shadow-sm ring-1 ring-black/5">
-                    <CardContent className="p-4 pb-2">
-                      <div className="flex justify-between items-start mb-2">
-                        <Badge variant="outline" className={`
-                          ${task.priority === 'High' ? 'bg-red-50 text-red-600 border-red-100' : 
-                            task.priority === 'Medium' ? 'bg-orange-50 text-orange-600 border-orange-100' : 
-                            'bg-blue-50 text-blue-600 border-blue-100'}
+                tasks
+                  .filter((t) => t.status === status && t.project === selectedProject)
+                  .map((task) => (
+                    <Card key={task.id} className="border-none shadow-sm ring-1 ring-black/5">
+                      <CardContent className="p-4 pb-2">
+                        <div className="flex justify-between items-start mb-2">
+                          <Badge variant="outline" className={`
+                          ${task.priority === 'High' ? 'bg-red-50 text-red-600 border-red-100' :
+                              task.priority === 'Medium' ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                'bg-blue-50 text-blue-600 border-blue-100'}
                           border-none font-medium
                         `}>
-                          {task.priority}
-                        </Badge>
-                        <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 text-muted-foreground">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <h3 className="font-semibold text-base leading-snug mb-1">{task.title}</h3>
-                      <p className="text-xs text-muted-foreground">{task.project}</p>
-                    </CardContent>
-                    <CardFooter className="p-4 pt-2 flex items-center justify-between border-t border-border/40 mt-2">
-                      <div className="flex items-center gap-2">
-                         <Avatar className="h-6 w-6">
+                            {task.priority}
+                          </Badge>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 text-muted-foreground">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <h3 className="font-semibold text-base leading-snug mb-1">{task.title}</h3>
+                        <p className="text-xs text-muted-foreground">{task.project}</p>
+                      </CardContent>
+                      <CardFooter className="p-4 pt-2 flex items-center justify-between border-t border-border/40 mt-2">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6">
                             <AvatarFallback className="text-[10px] bg-primary text-primary-foreground">{task.assignee}</AvatarFallback>
-                         </Avatar>
-                         <div className={`flex items-center gap-1 text-xs font-medium ${task.dueDate === 'Overdue' ? 'text-destructive' : 'text-muted-foreground'}`}>
-                           {task.dueDate === 'Overdue' ? <AlertCircle className="h-3 w-3" /> : <Calendar className="h-3 w-3" />}
-                           {task.dueDate}
-                         </div>
-                      </div>
-                      <Badge variant="secondary" className="text-[10px] font-normal">{task.tag}</Badge>
-                    </CardFooter>
-                  </Card>
-                ))
+                          </Avatar>
+                          <div className={`flex items-center gap-1 text-xs font-medium ${task.dueDate === 'Overdue' ? 'text-destructive' : 'text-muted-foreground'}`}>
+                            {task.dueDate === 'Overdue' ? <AlertCircle className="h-3 w-3" /> : <Calendar className="h-3 w-3" />}
+                            {task.dueDate}
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="text-[10px] font-normal">{task.tag}</Badge>
+                      </CardFooter>
+                    </Card>
+                  ))
               )}
             </TabsContent>
           ))}

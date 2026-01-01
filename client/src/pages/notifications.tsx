@@ -4,17 +4,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Bell, 
-  AlertCircle, 
-  CheckCircle2, 
+import {
+  Bell,
+  AlertCircle,
+  CheckCircle2,
   Clock,
   DollarSign,
   TrendingUp,
   Info,
-  X
+  X,
+  ArrowLeft
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "wouter";
 
 // Mock notifications data
 const taskAlerts = [
@@ -120,6 +122,12 @@ const getThresholdColor = (threshold: number) => {
 export default function Notifications() {
   return (
     <MobileLayout title="Notifications">
+      <Link href="/">
+        <Button size="icon" variant={"outline"} className="border-0 shadow-none">
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+      </Link>
+
       <div className="px-5 py-6">
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-6">

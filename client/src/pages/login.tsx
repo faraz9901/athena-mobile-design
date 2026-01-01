@@ -54,6 +54,7 @@ export default function Login() {
             await login(phone, otpInput);
             // Navigation handled by useEffect
         } catch (err: any) {
+            console.log(error)
             setError(err.message || "Invalid OTP");
         } finally {
             setSubmitting(false);

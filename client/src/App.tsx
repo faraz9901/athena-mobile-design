@@ -10,6 +10,8 @@ import ProjectDetail from "@/pages/project-detail";
 import Tasks from "@/pages/tasks";
 import Expenses from "@/pages/expenses";
 import Documents from "@/pages/documents";
+import Chat from "@/pages/chat";
+import ScanDocuments from "@/pages/scan";
 import CreateProjectUpload from "@/pages/create-project-upload";
 import CreateProjectForm from "@/pages/create-project-form";
 import CreateProjectShare from "@/pages/create-project-share";
@@ -32,6 +34,8 @@ function Router() {
       <ProtectedRoute path="/projects" component={ProjectList} />
       <ProtectedRoute path="/project/:id" component={ProjectDetail} />
       <ProtectedRoute path="/tasks" component={Tasks} />
+      <ProtectedRoute path="/chat" component={Chat} />
+      <ProtectedRoute path="/scan" component={ScanDocuments} />
       <ProtectedRoute path="/task/:id" component={TaskDetail} />
       <ProtectedRoute path="/expenses" component={Expenses} />
       <ProtectedRoute path="/add-expense" component={AddExpense} />

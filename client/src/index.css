@@ -12,26 +12,26 @@
 
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
-  
+
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  
+
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-  
+
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  
+
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-  
+
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-  
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  
+
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-popover: hsl(var(--popover));
@@ -43,7 +43,7 @@
 
   --font-sans: 'DM Sans', 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
-  
+
   --animate-in: fade-in 0.2s ease-out;
   --animate-slide-up: slide-up 0.3s cubic-bezier(0.2, 0.0, 0, 1.0);
 }
@@ -52,7 +52,7 @@
   :root {
     /* Material 3 Inspired Colors - Blue/Teal Theme */
     /* Primary: Deep Tech Blue */
-    --primary: 215 90% 32%; 
+    --primary: 215 90% 32%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary: Slate Blue */
@@ -64,8 +64,10 @@
     --accent-foreground: 170 100% 20%;
 
     /* Backgrounds */
-    --background: 210 20% 98%; /* Slightly tinted off-white */
-    --foreground: 215 25% 15%; /* Deep slate text */
+    --background: 210 20% 98%;
+    /* Slightly tinted off-white */
+    --foreground: 215 25% 15%;
+    /* Deep slate text */
 
     --card: 0 0% 100%;
     --card-foreground: 215 25% 15%;
@@ -134,4 +136,14 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }

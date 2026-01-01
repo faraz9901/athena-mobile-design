@@ -3,10 +3,11 @@ import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SmartInput } from "@/components/ui/smart-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
+import {
   ArrowLeft,
   ArrowRight,
   Calendar,
@@ -43,7 +44,7 @@ const mockExtractedData = {
 
 export default function CreateProjectForm() {
   const [, setLocation] = useLocation();
-  
+
   // Form state with auto-filled values
   const [formData, setFormData] = useState({
     nameOfWork: mockExtractedData.nameOfWork,
@@ -123,17 +124,19 @@ export default function CreateProjectForm() {
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
               Basic Information
             </h3>
-            
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="nameOfWork">Name of Work</Label>
                 <div className="relative">
                   <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="nameOfWork"
                     value={formData.nameOfWork}
                     onChange={(e) => handleInputChange("nameOfWork", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.nameOfWork]}
+                    suggestionsLabel="Extracted project titles"
                   />
                 </div>
               </div>
@@ -154,12 +157,14 @@ export default function CreateProjectForm() {
 
               <div className="space-y-2">
                 <Label htmlFor="typeOfWork">Type of Work</Label>
-                <Input
+                <SmartInput
                   id="typeOfWork"
                   value={formData.typeOfWork}
                   onChange={(e) => handleInputChange("typeOfWork", e.target.value)}
                   className="h-11 rounded-xl"
                   placeholder="e.g., Commercial Construction"
+                  suggestions={[mockExtractedData.typeOfWork]}
+                  suggestionsLabel="Extracted type of work"
                 />
               </div>
 
@@ -167,11 +172,13 @@ export default function CreateProjectForm() {
                 <Label htmlFor="tenderId">Tender ID</Label>
                 <div className="relative">
                   <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="tenderId"
                     value={formData.tenderId}
                     onChange={(e) => handleInputChange("tenderId", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.tenderId]}
+                    suggestionsLabel="Extracted tender IDs"
                   />
                 </div>
               </div>
@@ -185,15 +192,17 @@ export default function CreateProjectForm() {
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
               Tendering Authority
             </h3>
-            
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="tenderingAuthorityName">Authority Name</Label>
-                <Input
+                <SmartInput
                   id="tenderingAuthorityName"
                   value={formData.tenderingAuthorityName}
                   onChange={(e) => handleInputChange("tenderingAuthorityName", e.target.value)}
                   className="h-11 rounded-xl"
+                  suggestions={[mockExtractedData.tenderingAuthorityName]}
+                  suggestionsLabel="Extracted authority names"
                 />
               </div>
 
@@ -209,11 +218,13 @@ export default function CreateProjectForm() {
 
               <div className="space-y-2">
                 <Label htmlFor="departmentName">Department Name</Label>
-                <Input
+                <SmartInput
                   id="departmentName"
                   value={formData.departmentName}
                   onChange={(e) => handleInputChange("departmentName", e.target.value)}
                   className="h-11 rounded-xl"
+                  suggestions={[mockExtractedData.departmentName]}
+                  suggestionsLabel="Extracted department name"
                 />
               </div>
             </div>
@@ -226,19 +237,21 @@ export default function CreateProjectForm() {
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
               Financial Information
             </h3>
-            
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="totalWorkAmount">Total Work Amount (₹)</Label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="totalWorkAmount"
                     type="number"
                     value={formData.totalWorkAmount}
                     onChange={(e) => handleInputChange("totalWorkAmount", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
                     placeholder="0.00"
+                    suggestions={[mockExtractedData.totalWorkAmount]}
+                    suggestionsLabel="Extracted total amount"
                   />
                 </div>
               </div>
@@ -247,13 +260,15 @@ export default function CreateProjectForm() {
                 <Label htmlFor="tentativeAmount">Tentative Amount (₹) - Manual</Label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="tentativeAmount"
                     type="number"
                     value={formData.tentativeAmount}
                     onChange={(e) => handleInputChange("tentativeAmount", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
                     placeholder="0.00"
+                    suggestions={[mockExtractedData.tentativeAmount]}
+                    suggestionsLabel="Extracted tentative amount"
                   />
                 </div>
               </div>
@@ -262,13 +277,15 @@ export default function CreateProjectForm() {
                 <Label htmlFor="emdAmount">EMD Amount (₹)</Label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="emdAmount"
                     type="number"
                     value={formData.emdAmount}
                     onChange={(e) => handleInputChange("emdAmount", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
                     placeholder="0.00"
+                    suggestions={[mockExtractedData.emdAmount]}
+                    suggestionsLabel="Extracted EMD amount"
                   />
                 </div>
               </div>
@@ -282,18 +299,20 @@ export default function CreateProjectForm() {
             <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
               Dates & Duration
             </h3>
-            
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="bidSubmissionDate">Bid Submission Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="bidSubmissionDate"
                     type="date"
                     value={formData.bidSubmissionDate}
                     onChange={(e) => handleInputChange("bidSubmissionDate", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.bidSubmissionDate]}
+                    suggestionsLabel="Extracted bid submission date"
                   />
                 </div>
               </div>
@@ -302,12 +321,14 @@ export default function CreateProjectForm() {
                 <Label htmlFor="emdRefundDate">EMD Refund Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="emdRefundDate"
                     type="date"
                     value={formData.emdRefundDate}
                     onChange={(e) => handleInputChange("emdRefundDate", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.emdRefundDate]}
+                    suggestionsLabel="Extracted EMD refund date"
                   />
                 </div>
               </div>
@@ -316,12 +337,14 @@ export default function CreateProjectForm() {
                 <Label htmlFor="startDate">Start Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="startDate"
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => handleInputChange("startDate", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.startDate]}
+                    suggestionsLabel="Extracted start date"
                   />
                 </div>
               </div>
@@ -330,25 +353,29 @@ export default function CreateProjectForm() {
                 <Label htmlFor="endDate">End Date</Label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
+                  <SmartInput
                     id="endDate"
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => handleInputChange("endDate", e.target.value)}
                     className="pl-9 h-11 rounded-xl"
+                    suggestions={[mockExtractedData.endDate]}
+                    suggestionsLabel="Extracted end date"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="workDuration">Work Duration (Months)</Label>
-                <Input
+                <SmartInput
                   id="workDuration"
                   type="number"
                   value={formData.workDuration}
                   onChange={(e) => handleInputChange("workDuration", e.target.value)}
                   className="h-11 rounded-xl"
                   placeholder="0"
+                  suggestions={[mockExtractedData.workDuration]}
+                  suggestionsLabel="Extracted duration"
                 />
               </div>
             </div>
@@ -360,7 +387,7 @@ export default function CreateProjectForm() {
           <CardContent className="p-4 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Applicable Taxes
+                Applicable Taxes
               </h3>
               <Button
                 type="button"
@@ -372,7 +399,7 @@ export default function CreateProjectForm() {
                 + Add Tax
               </Button>
             </div>
-            
+
             <div className="space-y-3">
               {formData.taxes.map((tax, index) => (
                 <div key={index} className="flex gap-2">
