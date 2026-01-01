@@ -1,0 +1,381 @@
+Design a mobile app UI (Android-first, Flutter-based) for a construction & tender project management SaaS application.
+The app is used by project owners, managers, partners, vendors, and teams to manage the full tender-to-project-closure lifecycle, including documents, expenses, tasks, execution, and reporting.
+
+Design Style Guidelines
+
+Follow Material 3 (Material You) design principles
+
+Clean, professional, enterprise-grade UI
+
+White / light background with subtle accent colors
+
+Card-based layout, clear hierarchy
+
+Mobile-first (single-column)
+
+Consistent app bar, FAB usage, bottom sheets
+
+Icons should be intuitive and minimal
+
+SCREENS TO DESIGN
+1. Dashboard Module
+1.1 Home Dashboard Screen
+
+Top App Bar:
+
+Greeting text
+
+Profile avatar
+
+Notification bell
+
+Stat Cards:
+
+Active Projects
+
+Overdue Tasks
+
+Monthly Expenses
+
+Recent Activity Feed:
+
+Task updates
+
+Expense added
+
+Document uploaded
+
+Team messages
+
+Floating Action Button (Quick Actions):
+
+Create Project
+
+Add Task
+
+Add Expense
+
+Scan Document
+
+1.2 Notifications Screen
+
+Task alerts
+
+Budget alerts only (no storage alerts)
+
+System messages
+
+Budget threshold indicators at 70%, 85%, and 100%
+
+2. Project & Team Management
+2.1 Vendor & Partner Management Screen
+
+Add vendors / partners as team members
+
+Full access indicator
+
+Vendor uploads invoices
+
+Partner updates task status
+
+2.2 Project List Screen
+
+List of all projects
+
+Status filter (Draft, Submitted, Secured, Active, Completed, Closed)
+
+2.3 Create Project Flow
+2.3.1 Upload Documents Screen
+
+Project name field
+
+Document category selector
+
+File upload section
+
+Info note: “System will auto-extract data from documents”
+
+2.3.2 Project Creation Form Screen
+
+Auto-filled editable fields:
+
+Name of work
+
+Location of work
+
+Tendering authority name & address
+
+Department name
+
+Type of work
+
+Tender ID
+
+Total work amount
+
+Tentative amount (manual)
+
+Work duration
+
+Bid submission date
+
+EMD amount
+
+EMD refund date
+
+Start date
+
+End date
+
+Applicable taxes with percentage
+
+2.3.3 Project Share Screen
+
+Select share type: Fixed / Partnership
+
+Partner share percentage inputs
+
+Note: only project owner can edit later
+
+Confirm CTA
+
+3. Project Detail Screen (Main Hub)
+Header (Always Visible)
+
+Project name
+
+Tender ID
+
+Department name
+
+Status badge (Draft, Submitted, Secured, Failed, Active, Completed, Closed)
+
+Budget summary indicator:
+
+Tentative
+
+Final allotted
+
+Spent
+
+Remaining
+
+Key dates (Bid submission, Start–End)
+
+Contextual action buttons based on status
+
+Tabs Layout
+Overview Tab
+
+Project summary
+
+Timeline milestones
+
+Tender financials (EMD, security deposit)
+
+Status tracker (Draft → Closed)
+
+Documents Tab
+
+Categorized document sections:
+
+Tender stage
+
+Award stage
+
+Execution stage
+
+Financial & compliance
+
+OCR upload indicator
+
+Status tags (Uploaded / Pending)
+
+Expenses Tab
+
+Expense ledger (auto + manual)
+
+Running bills
+
+Deposits & security
+
+Tax summary
+
+Indicators:
+
+Cash in vs cash out
+
+Tax payable alerts
+
+Refund reminders
+
+Projected profit
+
+Execution / Progress Tab
+
+Daily progress log
+
+Photo uploads
+
+Planned vs actual duration
+
+Delay indicator
+
+Defect Liability Period (DLP) section
+
+Partners & Share Tab (Conditional)
+
+Partner list
+
+Share percentage
+
+Profit preview
+
+Tasks Tab
+
+Linked Kanban board
+
+Task status filters
+
+Reports Tab (Visible only when completed)
+
+Profit calculation
+
+Expense & tax summary
+
+Partner-wise distribution
+
+Compliance checklist
+
+Close project CTA
+
+4. Task Management
+Task Board (Kanban)
+
+Columns: To Do, In Progress, Completed
+
+Task cards:
+
+Title
+
+Assignee avatar
+
+Due date
+
+Priority color
+
+Overdue tasks highlighted in red
+
+Task Detail Screen
+
+Description
+
+Priority
+
+Status
+
+Comments
+
+Attachments (max 10 MB)
+
+5. Expense Management
+Permission Screens
+
+Camera permission screen
+
+File access permission screen
+
+Expense List Screen
+
+Filter by project
+
+Filter by date
+
+Add Expense Screen
+
+Manual entry & OCR modes
+
+Fields:
+
+Description
+
+Vendor
+
+Rate, unit, quantity
+
+Amount
+
+GST %
+
+Category
+
+Payment mode
+
+Billing type
+
+Paid by
+
+Receipt reference
+
+Notes
+
+Date
+
+OCR Screens
+
+OCR processing (loader)
+
+OCR data correction (highlight low confidence fields)
+
+OCR failure fallback screen
+
+6. Document Management
+
+Document list screen
+
+Scan document screen (camera UI)
+
+7. Gantt & Charts
+Timeline Gantt Screen
+
+Project milestones
+
+Task dependencies
+
+Expenditure Gantt / Pie Screen
+
+Budget burn rate
+
+Cash flow risk indicators
+
+8. Chat & Collaboration
+
+Project group chat
+
+File sharing (10 MB)
+
+Connection lost screen with reconnect banner
+
+9. Reports
+
+Reports screen
+
+Export options:
+
+PDF
+
+Excel
+
+GST breakdown
+
+Tally XML
+
+10. Profile & Settings
+
+Profile screen
+
+Plan details
+
+Plan upgrade screen with Razorpay checkout
+
+Plan limit blocker system screen
