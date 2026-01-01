@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev:client": "vite dev --port 5000",
-    "dev": "NODE_ENV=development tsx server/index.ts",
-    "build": "tsx script/build.ts",
-    "start": "NODE_ENV=production node dist/index.cjs",
+    "dev": "vite dev --port 5000",
+    "build": "vite build",
+    "start": "npm run preview",
     "check": "tsc",
     "db:push": "drizzle-kit push"
   },

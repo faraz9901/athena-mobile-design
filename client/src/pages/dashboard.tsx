@@ -18,8 +18,12 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { useLocation } from "wouter";
 
 export default function Dashboard() {
+
+  const [,navigate] = useLocation();
+
   return (
     <MobileLayout fabAction={() => {}}>
       {/* Top App Bar Area */}
@@ -151,13 +155,13 @@ export default function Dashboard() {
           <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
           <div className="grid grid-cols-4 gap-2">
             {[
-               { icon: Building2, label: "New Project" },
-               { icon: CheckSquareIcon, label: "Add Task" },
-               { icon: Receipt, label: "Add Expense" },
-               { icon: FileText, label: "Scan Doc" },
+               { icon: Building2, label: "New Project", href: "/create-project-upload" },
+               { icon: CheckSquareIcon, label: "Add Task",},
+               { icon: Receipt, label: "Add Expense",  },
+               { icon: FileText, label: "Scan Doc", href: "/documents" },
             ].map((action, i) => (
               <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
-                <div className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">
+                <div onClick={() => action.href && navigate(action.href)} className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">
                   <action.icon className="h-5 w-5" />
                 </div>
                 <span className="text-[10px] font-medium text-center leading-tight">{action.label}</span>
