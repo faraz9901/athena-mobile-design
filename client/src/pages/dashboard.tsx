@@ -3,14 +3,14 @@ import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Bell, 
-  Search, 
-  TrendingUp, 
-  AlertCircle, 
+import {
+  Bell,
+  Search,
+  TrendingUp,
+  AlertCircle,
   Briefcase,
   CheckSquare,
-  Clock, 
+  Clock,
   FileCheck,
   Building2,
   Receipt,
@@ -22,10 +22,10 @@ import { useLocation } from "wouter";
 
 export default function Dashboard() {
 
-  const [,navigate] = useLocation();
+  const [, navigate] = useLocation();
 
   return (
-    <MobileLayout fabAction={() => {}}>
+    <MobileLayout fabAction={() => { }}>
       {/* Top App Bar Area */}
       <header className="px-6 pt-8 pb-4 bg-background sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ export default function Dashboard() {
           <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50">
             <Search className="h-5 w-5 text-muted-foreground" />
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50 relative">
+          <Button onClick={() => navigate("/notifications")} variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50 relative">
             <Bell className="h-5 w-5 text-muted-foreground" />
             <span className="absolute top-2 right-2.5 h-2 w-2 bg-destructive rounded-full border border-background"></span>
           </Button>
@@ -68,7 +68,7 @@ export default function Dashboard() {
           </Card>
 
           <div className="grid grid-rows-2 gap-3">
-             <Card className="bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/30 shadow-sm">
+            <Card className="bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/30 shadow-sm">
               <CardContent className="p-3 flex items-center justify-between">
                 <div>
                   <span className="text-2xl font-bold text-red-600 dark:text-red-400">5</span>
@@ -79,7 +79,7 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-900/30 shadow-sm">
               <CardContent className="p-3 flex items-center justify-between">
                 <div>
@@ -100,34 +100,34 @@ export default function Dashboard() {
             <h2 className="text-lg font-bold">Recent Activity</h2>
             <Button variant="link" className="text-primary h-auto p-0 text-sm">View All</Button>
           </div>
-          
+
           <div className="space-y-0">
             {[
-              { 
-                icon: FileCheck, 
-                bg: "bg-blue-100 text-blue-600", 
-                title: "Tender Document Approved", 
+              {
+                icon: FileCheck,
+                bg: "bg-blue-100 text-blue-600",
+                title: "Tender Document Approved",
                 desc: "Metro Station Project • 2h ago",
                 unread: true
               },
-              { 
-                icon: Receipt, 
-                bg: "bg-orange-100 text-orange-600", 
-                title: "New Expense Added", 
+              {
+                icon: Receipt,
+                bg: "bg-orange-100 text-orange-600",
+                title: "New Expense Added",
                 desc: "Cement Supply Invoice #402 • 5h ago",
                 unread: false
               },
-              { 
-                icon: Clock, 
-                bg: "bg-purple-100 text-purple-600", 
-                title: "Task Deadline Updated", 
+              {
+                icon: Clock,
+                bg: "bg-purple-100 text-purple-600",
+                title: "Task Deadline Updated",
                 desc: "Foundation Work • 1d ago",
                 unread: false
               },
-              { 
-                icon: Building2, 
-                bg: "bg-gray-100 text-gray-600", 
-                title: "New Site Photos", 
+              {
+                icon: Building2,
+                bg: "bg-gray-100 text-gray-600",
+                title: "New Site Photos",
                 desc: "Highway Expansion • 2d ago",
                 unread: false
               },
@@ -149,16 +149,16 @@ export default function Dashboard() {
             ))}
           </div>
         </section>
-        
+
         {/* Quick Actions Grid */}
         <section>
           <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
           <div className="grid grid-cols-4 gap-2">
             {[
-               { icon: Building2, label: "New Project", href: "/create-project-upload" },
-               { icon: CheckSquareIcon, label: "Add Task",},
-               { icon: Receipt, label: "Add Expense",  },
-               { icon: FileText, label: "Scan Doc", href: "/documents" },
+              { icon: Building2, label: "New Project", href: "/create-project-upload" },
+              { icon: CheckSquareIcon, label: "Add Task", },
+              { icon: Receipt, label: "Add Expense", },
+              { icon: FileText, label: "Scan Doc", href: "/documents" },
             ].map((action, i) => (
               <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
                 <div onClick={() => action.href && navigate(action.href)} className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">

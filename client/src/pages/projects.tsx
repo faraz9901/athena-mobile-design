@@ -57,7 +57,7 @@ const projects = [
 
 export default function ProjectList() {
   return (
-    <MobileLayout title="Projects" fabAction={() => {}}>
+    <MobileLayout title="Projects" fabAction={() => { }}>
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Projects</h1>
@@ -65,19 +65,19 @@ export default function ProjectList() {
             <Filter className="mr-2 h-3.5 w-3.5" /> Filter
           </Button>
         </div>
-        
+
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search projects..." 
+          <Input
+            placeholder="Search projects..."
             className="pl-9 bg-secondary/30 border-none rounded-xl h-11 focus-visible:ring-1 focus-visible:ring-primary"
           />
         </div>
 
         <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
           {["All", "Active", "Submitted", "Draft", "Completed"].map((filter, i) => (
-            <Badge 
-              key={i} 
+            <Badge
+              key={i}
               variant={i === 0 ? "default" : "secondary"}
               className="rounded-full px-4 py-1.5 text-xs font-normal cursor-pointer hover:opacity-90 shrink-0"
             >
@@ -87,7 +87,7 @@ export default function ProjectList() {
         </div>
       </div>
 
-      <div className="px-5 py-2 space-y-4">
+      <div className="px-5 py-2 flex flex-col gap-4">
         {projects.map((project) => (
           <Link href={`/project/${project.id}`} key={project.id}>
             <a className="block">
@@ -112,7 +112,7 @@ export default function ProjectList() {
                       </span>
                     ))}
                   </div>
-                  
+
                   <div className="space-y-1.5">
                     <div className="flex justify-between text-xs font-medium">
                       <span>Progress</span>
@@ -134,7 +134,7 @@ export default function ProjectList() {
             </a>
           </Link>
         ))}
-        
+
         <div className="h-8"></div> {/* Spacer */}
       </div>
     </MobileLayout>
