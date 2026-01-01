@@ -18,24 +18,33 @@ import VendorsPartners from "@/pages/vendors-partners";
 import TaskDetail from "@/pages/task-detail";
 import AddExpense from "@/pages/add-expense";
 import Profile from "@/pages/profile";
+import { AuthProvider } from "@/lib/auth-context";
+
+import Register from "./pages/register";
+import { ProtectedRoute } from "./lib/protected-route";
+import Login from "./pages/login";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/projects" component={ProjectList} />
-      <Route path="/project/:id" component={ProjectDetail} />
-      <Route path="/tasks" component={Tasks} />
-      <Route path="/task/:id" component={TaskDetail} />
-      <Route path="/expenses" component={Expenses} />
-      <Route path="/add-expense" component={AddExpense} />
-      <Route path="/documents" component={Documents} />
-      <Route path="/notifications" component={Notifications} />
-      <Route path="/vendors-partners" component={VendorsPartners} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/create-project-upload" component={CreateProjectUpload} />
-      <Route path="/create-project-form" component={CreateProjectForm} />
-      <Route path="/create-project-share" component={CreateProjectShare} />
+      <Route path="/login" component={Login} />
+      <ProtectedRoute path="/" component={Dashboard} />
+      <ProtectedRoute path="/projects" component={ProjectList} />
+      <ProtectedRoute path="/project/:id" component={ProjectDetail} />
+      <ProtectedRoute path="/tasks" component={Tasks} />
+      <ProtectedRoute path="/task/:id" component={TaskDetail} />
+      <ProtectedRoute path="/expenses" component={Expenses} />
+      <ProtectedRoute path="/add-expense" component={AddExpense} />
+      <ProtectedRoute path="/documents" component={Documents} />
+      <ProtectedRoute path="/notifications" component={Notifications} />
+      <ProtectedRoute path="/vendors-partners" component={VendorsPartners} />
+      <ProtectedRoute path="/profile" component={Profile} />
+      <ProtectedRoute path="/create-project-upload" component={CreateProjectUpload} />
+      <ProtectedRoute path="/create-project-form" component={CreateProjectForm} />
+      <ProtectedRoute path="/create-project-share" component={CreateProjectShare} />
+      {/* Register/Onboarding might need to be protected but only for logged in users who haven't finished onboarding. 
+          For simplicity, making it accessible or protected. Since user needs to be logged in via OTP first, it is protected. */}
+      <ProtectedRoute path="/register" component={Register} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -45,11 +54,14 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <AuthProvider>
+          <Toaster />
+          <Router />
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 }
 
 export default App;
+

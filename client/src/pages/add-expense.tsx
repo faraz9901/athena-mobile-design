@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   ArrowLeft,
   Camera,
   FileText,
@@ -42,7 +42,7 @@ const paidByOptions = ["Self", "Partner", "Vendor", "Other"];
 export default function AddExpense() {
   const [, setLocation] = useLocation();
   const [mode, setMode] = useState<"manual" | "ocr">("manual");
-  
+
   const [formData, setFormData] = useState({
     description: "",
     vendor: "",
@@ -62,16 +62,19 @@ export default function AddExpense() {
   });
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Auto-calculate amount if rate, quantity, and unit are provided
-    if (field === "rate" || field === "quantity" || field === "unit") {
-      const rate = field === "rate" ? parseFloat(value) : parseFloat(prev.rate);
-      const qty = field === "quantity" ? parseFloat(value) : parseFloat(prev.quantity);
-      if (rate && qty) {
-        setFormData(prev => ({ ...prev, amount: (rate * qty).toFixed(2) }));
+    setFormData(prev => {
+      const newState = { ...prev, [field]: value };
+
+      // Auto-calculate amount if rate or quantity changes
+      if (field === "rate" || field === "quantity") {
+        const rate = parseFloat(newState.rate);
+        const quantity = parseFloat(newState.quantity);
+        if (!isNaN(rate) && !isNaN(quantity)) {
+          newState.amount = (rate * quantity).toFixed(2);
+        }
       }
-    }
+      return newState;
+    });
   };
 
   const handleSave = () => {
@@ -115,7 +118,7 @@ export default function AddExpense() {
                 <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                   Basic Information
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="description">Description *</Label>
@@ -178,7 +181,7 @@ export default function AddExpense() {
                 <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                   Quantity & Pricing
                 </h3>
-                
+
                 <div className="grid grid-cols-3 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="rate">Rate (₹)</Label>
@@ -225,7 +228,7 @@ export default function AddExpense() {
                 <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                   Financial Details
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="amount">Amount (₹) *</Label>
@@ -266,7 +269,7 @@ export default function AddExpense() {
                 <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
                   Payment & Billing
                 </h3>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="paymentMode">Payment Mode</Label>

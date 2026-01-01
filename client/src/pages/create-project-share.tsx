@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   ArrowLeft,
   CheckCircle2,
   Info,
@@ -32,6 +32,7 @@ export default function CreateProjectShare() {
     name: string;
     email: string;
     share: string;
+    avatar?: string;
   }>>([
     { id: "1", name: "John Doe", email: "john@example.com", share: "60" },
     { id: "2", name: "Jane Smith", email: "jane@example.com", share: "40" }
@@ -101,7 +102,7 @@ export default function CreateProjectShare() {
               className="space-y-3"
             >
               <div className="flex items-center space-x-3 p-4 rounded-xl border-2 border-transparent hover:border-primary/20 transition-colors cursor-pointer"
-                   onClick={() => setShareType("fixed")}>
+                onClick={() => setShareType("fixed")}>
                 <RadioGroupItem value="fixed" id="fixed" className="mt-0.5" />
                 <div className="flex-1">
                   <Label htmlFor="fixed" className="text-base font-medium cursor-pointer">
@@ -112,9 +113,9 @@ export default function CreateProjectShare() {
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-3 p-4 rounded-xl border-2 border-transparent hover:border-primary/20 transition-colors cursor-pointer"
-                   onClick={() => setShareType("partnership")}>
+                onClick={() => setShareType("partnership")}>
                 <RadioGroupItem value="partnership" id="partnership" className="mt-0.5" />
                 <div className="flex-1">
                   <Label htmlFor="partnership" className="text-base font-medium cursor-pointer">
@@ -174,7 +175,7 @@ export default function CreateProjectShare() {
                           </Button>
                         )}
                       </div>
-                      
+
                       <div className="space-y-2">
                         <Label htmlFor={`share-${partner.id}`}>
                           Share Percentage
@@ -236,7 +237,7 @@ export default function CreateProjectShare() {
                   Important Note
                 </p>
                 <p className="text-xs text-amber-800/80 dark:text-amber-300/80">
-                  Only the project owner can edit share settings later. 
+                  Only the project owner can edit share settings later.
                   Make sure all information is correct before confirming.
                 </p>
               </div>
@@ -257,7 +258,7 @@ export default function CreateProjectShare() {
                   const sharePercent = parseFloat(partner.share || "0");
                   const estimatedProfit = 150000; // Mock profit amount
                   const partnerProfit = (estimatedProfit * sharePercent) / 100;
-                  
+
                   return (
                     <div key={partner.id} className="flex items-center justify-between p-2 rounded-lg bg-background">
                       <span className="text-sm text-muted-foreground">{partner.name}</span>

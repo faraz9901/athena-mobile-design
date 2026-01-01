@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "wouter";
-import { LayoutDashboard, Briefcase, CheckSquare, FileText, Menu, Plus, File } from "lucide-react";
+import { LayoutDashboard, Briefcase, CheckSquare, Plus, File, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -19,12 +19,13 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
     { icon: LayoutDashboard, label: "Home", href: "/" },
     { icon: Briefcase, label: "Projects", href: "/projects" },
     { icon: CheckSquare, label: "Tasks", href: "/tasks" },
-    { icon: FileText, label: "Expenses", href: "/expenses" },
+    { icon: MessageSquare, label: "Chat", href: "/chat" },
+    { icon: File, label: "Scan Documents", href: "/scan" },
   ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto relative shadow-2xl overflow-hidden border-x border-border/40">
-      
+
       {/* Content Area - Scrollable */}
       <main className="flex-1 overflow-y-auto pb-24 no-scrollbar">
         {children}
@@ -33,8 +34,8 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
       {/* FAB - Conditional */}
       {fabAction && (
         <div className="absolute bottom-20 right-4 z-50">
-          <Button 
-            size="icon" 
+          <Button
+            size="icon"
             className="h-14 w-14 rounded-2xl shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground transition-transform hover:scale-105 active:scale-95"
             onClick={fabAction}
           >
@@ -53,8 +54,8 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
                 <a className="flex flex-col items-center justify-center w-full h-full space-y-1 group">
                   <div className={cn(
                     "px-4 py-1 rounded-full transition-all duration-300",
-                    isActive 
-                      ? "bg-primary/10 text-primary" 
+                    isActive
+                      ? "bg-primary/10 text-primary"
                       : "text-muted-foreground group-hover:text-foreground"
                   )}>
                     <item.icon className={cn("h-5 w-5", isActive && "stroke-[2.5px]")} />
