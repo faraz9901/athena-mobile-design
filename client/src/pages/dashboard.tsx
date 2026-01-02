@@ -17,8 +17,8 @@ import {
   FileText,
   User,
   BriefcaseIcon,
+  Menu
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 
@@ -61,10 +61,13 @@ export default function Dashboard() {
       {/* Top App Bar Area */}
       <header className="px-6 pt-8 pb-4 bg-background sticky top-0 z-30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar className="h-10 w-10 border-2 border-white shadow-sm cursor-pointer" onClick={() => setSidebarOpen(true)}>
+          {/* <Avatar className="h-10 w-10 border-2 border-white shadow-sm cursor-pointer" onClick={() => setSidebarOpen(true)}>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
+          <Button size="icon" variant="ghost" className="rounded-full" onClick={() => setSidebarOpen(true)}>
+            <Menu className="h-5 w-5" />
+          </Button>
           <div>
             <p className="text-xs text-muted-foreground font-medium">Welcome back,</p>
             <h1 className="text-lg font-bold text-foreground leading-tight">John Doe</h1>
@@ -182,6 +185,24 @@ export default function Dashboard() {
           </div>
         </section>
 
+        <section>
+          <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { icon: Building2, label: "New Project", href: "/create-project-upload" },
+              { icon: CheckSquare, label: "Add Task", },
+              { icon: Receipt, label: "Add Expense", },
+              { icon: FileText, label: "Scan Doc", href: "/scan" },
+            ].map((action, i) => (
+              <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
+                <div onClick={() => action.href && navigate(action.href)} className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">
+                  <action.icon className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-medium text-center leading-tight">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
       </div>
     </MobileLayout>
   );

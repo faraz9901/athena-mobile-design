@@ -24,7 +24,7 @@ export function MobileLayout({ children, title, showProfile = false, fabAction, 
     { icon: Briefcase, label: "Projects", href: "/projects" },
     { icon: CheckSquare, label: "Tasks", href: "/tasks" },
     { icon: MessageSquare, label: "Chat", href: "/chat" },
-    { icon: File, label: "Scan Documents", href: "/scan" },
+    { icon: File, label: "Documents", href: "/documents" },
   ];
 
   return (
