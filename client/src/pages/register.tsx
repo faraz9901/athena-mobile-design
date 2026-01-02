@@ -401,7 +401,7 @@ export default function Register() {
     }
 
     return (
-        <MobileLayout showBottomNav={false}>
+        <MobileLayout showBottomNav={false} showSidebarToggle={false} >
             <div className="flex flex-col h-full">
                 <div className="px-5 py-6 space-y-3">
                     <h1 className="text-2xl font-bold">Setup Profile</h1>

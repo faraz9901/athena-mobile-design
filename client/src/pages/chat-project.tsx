@@ -150,23 +150,33 @@ export default function ChatProject() {
                 <div className="flex flex-col gap-2 text-[11px] text-muted-foreground items-center mb-2">
                     <span>Messages are visible to all members of this project group.</span>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-4">
                     {activeMessages.map((msg) => (
                         <div
                             key={msg.id}
-                            className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}
+                            className={`flex items-end gap-2 ${msg.fromMe ? "justify-end" : "justify-start"
+                                }`}
                         >
                             <div
-                                className={`max-w-[75%] rounded-2xl px-3 py-2 text-xs shadow-sm ${msg.fromMe
-                                        ? "bg-primary text-primary-foreground rounded-br-sm"
-                                        : "bg-secondary/70 text-foreground rounded-bl-sm"
+                                className={`relative max-w-[75%] px-3 py-2 text-xs leading-snug shadow-sm ${msg.fromMe
+                                    ? "bg-primary text-primary-foreground rounded-lg "
+                                    : "bg-muted text-foreground rounded-lg"
                                     }`}
                             >
-                                {msg.sender && !msg.fromMe && (
-                                    <p className="text-[10px] font-semibold mb-0.5 opacity-80">{msg.sender}</p>
+                                {/* Sender name */}
+                                {!msg.fromMe && msg.sender && (
+                                    <p className="mb-0.5 text-[10px] font-medium text-muted-foreground">
+                                        {msg.sender}
+                                    </p>
                                 )}
-                                <p className="whitespace-pre-wrap leading-snug">{msg.text}</p>
-                                <p className="text-[9px] opacity-70 mt-1 text-right">{msg.time}</p>
+
+                                {/* Message */}
+                                <p className="whitespace-pre-wrap">{msg.text}</p>
+
+                                {/* Time */}
+                                <span className="mt-1 block text-[9px] opacity-60 text-right">
+                                    {msg.time}
+                                </span>
                             </div>
                         </div>
                     ))}

@@ -122,11 +122,11 @@ const getThresholdColor = (threshold: number) => {
 export default function Notifications() {
   return (
     <MobileLayout title="Notifications">
-      <Link href="/">
+      {/* <Link href="/">
         <Button variant="outline" size="icon" className="text-primary hover:bg-primary/80 hover:text-primary-foreground">
           <ArrowLeft className="h-6 w-6" />
         </Button>
-      </Link>
+      </Link> */}
 
       <div className="px-5 py-6">
         <Tabs defaultValue="all" className="w-full">

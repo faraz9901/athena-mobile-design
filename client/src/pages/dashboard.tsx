@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Bell,
-  Search,
   TrendingUp,
   AlertCircle,
-  Briefcase,
   CheckSquare,
   Clock,
   FileCheck,
   Building2,
   Receipt,
   FileText,
-  User,
   BriefcaseIcon,
   Menu,
-  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
+import { useAuth } from "@/lib/auth-context";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -31,31 +27,7 @@ export default function Dashboard() {
     <MobileLayout
       sidebarOpen={sidebarOpen}
       onCloseSidebar={() => setSidebarOpen(false)}
-      sidebarContent={(
-        <div className="space-y-4">
-          <div className="space-y-2">
-            {[
-              { icon: Building2, label: "New Project", href: "/create-project-upload" },
-              { icon: CheckSquare, label: "Add Task", href: "/tasks" },
-              { icon: FileText, label: "Scan Doc", href: "/scan" },
-              { icon: Users, label: "Partners", href: "/vendors-partners" },
-              { icon: User, label: "Profile", href: "/profile" },
-            ].map((action, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => { setSidebarOpen(false); if (action.href) { navigate(action.href); } }}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/40 text-sm"
-              >
-                <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-primary">
-                  <action.icon className="h-4 w-4" />
-                </div>
-                <span className="flex-1 text-left font-medium text-foreground">{action.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      showSidebarToggle={false}
     >
       {/* Top App Bar Area */}
       <header className="px-6 pt-8 pb-4 bg-background sticky top-0 z-30 flex items-center justify-between">

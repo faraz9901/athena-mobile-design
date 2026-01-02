@@ -120,7 +120,7 @@ export default function Login() {
 
 
     return (
-        <MobileLayout showBottomNav={false}>
+        <MobileLayout showBottomNav={false} showSidebarToggle={false}>
             <div className="px-5 py-10 space-y-6 h-[calc(100vh-10rem)] flex flex-col justify-center">
                 <Card className="border-none shadow-sm">
                     <CardHeader>
