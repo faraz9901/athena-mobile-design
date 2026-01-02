@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, MoreHorizontal, Calendar, AlertCircle } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useLocation } from "wouter";
 
 const tasks = [
   {
@@ -53,6 +54,7 @@ const tasks = [
 export default function Tasks() {
   const projectNames = Array.from(new Set(tasks.map((t) => t.project)));
   const [selectedProject, setSelectedProject] = useState<string>(projectNames[0] ?? "");
+  const [, navigate] = useLocation()
 
   return (
     <MobileLayout title="Tasks" fabAction={() => { }} fabIcon={<Plus className="h-6 w-6" />}>
@@ -106,7 +108,7 @@ export default function Tasks() {
                 tasks
                   .filter((t) => t.status === status && t.project === selectedProject)
                   .map((task) => (
-                    <Card key={task.id} className="border-none shadow-sm ring-1 ring-black/5">
+                    <Card key={task.id} onClick={() => navigate(`/task/${task.id}`)} className="border-none shadow-sm ring-1 ring-black/5">
                       <CardContent className="p-4 pb-2">
                         <div className="flex justify-between items-start mb-2">
                           <Badge variant="outline" className={`

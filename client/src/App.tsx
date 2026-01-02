@@ -11,12 +11,14 @@ import Tasks from "@/pages/tasks";
 import Expenses from "@/pages/expenses";
 import Documents from "@/pages/documents";
 import Chat from "@/pages/chat";
+import ChatProject from "@/pages/chat-project";
 import ScanDocuments from "@/pages/scan";
 import CreateProjectUpload from "@/pages/create-project-upload";
 import CreateProjectForm from "@/pages/create-project-form";
 import CreateProjectShare from "@/pages/create-project-share";
 import Notifications from "@/pages/notifications";
 import VendorsPartners from "@/pages/vendors-partners";
+import PartnerEdit from "@/pages/partner-edit";
 import TaskDetail from "@/pages/task-detail";
 import AddExpense from "@/pages/add-expense";
 import Profile from "@/pages/profile";
@@ -35,6 +37,7 @@ function Router() {
       <ProtectedRoute path="/project/:id" component={ProjectDetail} />
       <ProtectedRoute path="/tasks" component={Tasks} />
       <ProtectedRoute path="/chat" component={Chat} />
+      <ProtectedRoute path="/chat/:projectId" component={ChatProject} />
       <ProtectedRoute path="/scan" component={ScanDocuments} />
       <ProtectedRoute path="/task/:id" component={TaskDetail} />
       <ProtectedRoute path="/expenses" component={Expenses} />
@@ -42,6 +45,7 @@ function Router() {
       <ProtectedRoute path="/documents" component={Documents} />
       <ProtectedRoute path="/notifications" component={Notifications} />
       <ProtectedRoute path="/vendors-partners" component={VendorsPartners} />
+      <ProtectedRoute path="/partner/:id" component={PartnerEdit} />
       <ProtectedRoute path="/profile" component={Profile} />
       <ProtectedRoute path="/create-project-upload" component={CreateProjectUpload} />
       <ProtectedRoute path="/create-project-form" component={CreateProjectForm} />

@@ -17,7 +17,8 @@ import {
   FileText,
   User,
   BriefcaseIcon,
-  Menu
+  Menu,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
@@ -37,6 +38,7 @@ export default function Dashboard() {
               { icon: Building2, label: "New Project", href: "/create-project-upload" },
               { icon: CheckSquare, label: "Add Task", href: "/tasks" },
               { icon: FileText, label: "Scan Doc", href: "/scan" },
+              { icon: Users, label: "Partners", href: "/vendors-partners" },
               { icon: User, label: "Profile", href: "/profile" },
             ].map((action, i) => (
               <button
