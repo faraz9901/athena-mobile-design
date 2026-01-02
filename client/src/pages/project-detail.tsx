@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -7,22 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   ArrowLeft,
-  Calendar,
   MapPin,
   MoreVertical,
   FileText,
-  DollarSign,
-  CheckSquare,
   Share2,
-  Clock,
   Download,
   Plus,
-  Building2
+  Building2,
 } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts"
 
-import { Link, useRoute } from "wouter";
+import { Link, useRoute, useLocation } from "wouter";
 import ProjectWorkflow, { WorkflowStatus } from "@/components/ProjectWorkflow";
+import Others from "@/components/Others";
 
 // mockData.ts
 export const ganttData = [
@@ -62,10 +58,10 @@ export const pieData = [
   { name: "Reporting", value: 16 },
 ]
 
-
 export default function ProjectDetail() {
   const [match, params] = useRoute("/project/:id");
   const projectId = params?.id;
+  const [, navigate] = useLocation();
 
   // Mock data - normally would fetch based on ID
   const project = {
@@ -146,11 +142,11 @@ export default function ProjectDetail() {
       <div className="px-5 mt-4">
         <Tabs defaultValue="workflow" className="w-full">
           <TabsList className="w-full grid grid-cols-4 bg-transparent p-0 gap-2 h-auto mb-4">
-            {["Workflow", "Files", "Report", "Analytics"].map((tab) => (
+            {["Workflow", "Files", "Report & Analytics", "Others"].map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab.toLowerCase()}
-                className="rounded-xl data-[state=active]:bg-secondary data-[state=active]:text-primary py-2 text-xs font-medium border border-transparent data-[state=active]:border-primary/10 transition-all"
+                className="rounded-xl data-[state=active]:bg-secondary data-[state=active]:text-primary py-2 text-xs font-medium border border-transparent data-[state=active]:border-primary/10 transition-all truncate line-clamp-1"
               >
                 {tab}
               </TabsTrigger>
@@ -195,7 +191,7 @@ export default function ProjectDetail() {
             ))}
           </TabsContent>
 
-          <TabsContent value="report" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <TabsContent value="report & analytics" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Card className="border-none shadow-sm">
               <CardHeader className="pb-2 flex flex-row items-center justify-between">
                 <div>
@@ -311,9 +307,7 @@ export default function ProjectDetail() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
 
-          <TabsContent value="analytics" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <Card className="border-none shadow-sm">
               <CardHeader className="pb-2 flex flex-row items-center justify-between">
                 <div>
@@ -337,11 +331,15 @@ export default function ProjectDetail() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          <TabsContent value="others" className="space-y-4">
+            <Others />
+          </TabsContent>
         </Tabs>
       </div>
 
       <div className="h-24" /> {/* Bottom spacer */}
-    </MobileLayout>
+    </MobileLayout >
   );
 }
 
