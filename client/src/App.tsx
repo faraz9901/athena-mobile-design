@@ -8,6 +8,7 @@ import Dashboard from "@/pages/dashboard";
 import ProjectList from "@/pages/projects";
 import ProjectDetail from "@/pages/project-detail";
 import Tasks from "@/pages/tasks";
+import AddTask from "@/pages/add-task";
 import Expenses from "@/pages/expenses";
 import Documents from "@/pages/documents";
 import Chat from "@/pages/chat";
@@ -23,6 +24,7 @@ import TaskDetail from "@/pages/task-detail";
 import AddExpense from "@/pages/add-expense";
 import Profile from "@/pages/profile";
 import { AuthProvider } from "@/lib/auth-context";
+import ProjectPendingTaskPage from "@/pages/ProjectPendingTaskPage";
 
 import Register from "./pages/register";
 import { ProtectedRoute } from "./lib/protected-route";
@@ -36,6 +38,7 @@ function Router() {
       <ProtectedRoute path="/projects" component={ProjectList} />
       <ProtectedRoute path="/project/:id" component={ProjectDetail} />
       <ProtectedRoute path="/tasks" component={Tasks} />
+      <ProtectedRoute path="/add-task" component={AddTask} />
       <ProtectedRoute path="/chat" component={Chat} />
       <ProtectedRoute path="/chat/:projectId" component={ChatProject} />
       <ProtectedRoute path="/scan" component={ScanDocuments} />
@@ -50,6 +53,7 @@ function Router() {
       <ProtectedRoute path="/create-project-upload" component={CreateProjectUpload} />
       <ProtectedRoute path="/create-project-form" component={CreateProjectForm} />
       <ProtectedRoute path="/create-project-share" component={CreateProjectShare} />
+      <ProtectedRoute path="/projects/:projectId/:pendingTask" component={ProjectPendingTaskPage} />
       {/* Register/Onboarding might need to be protected but only for logged in users who haven't finished onboarding. 
           For simplicity, making it accessible or protected. Since user needs to be logged in via OTP first, it is protected. */}
       <ProtectedRoute path="/register" component={Register} />

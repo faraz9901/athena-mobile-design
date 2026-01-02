@@ -61,9 +61,9 @@ export default function ProjectList() {
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Projects</h1>
-          <Button variant="outline" size="sm" className="h-8 rounded-full">
+          {/* <Button variant="outline" size="sm" className="h-8 rounded-full">
             <Filter className="mr-2 h-3.5 w-3.5" /> Filter
-          </Button>
+          </Button> */}
         </div>
 
         <div className="relative">

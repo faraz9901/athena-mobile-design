@@ -97,9 +97,9 @@ export default function ProjectDetail() {
             {/* <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
               <Share2 className="h-5 w-5" />
             </Button> */}
-            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10 -mr-2">
+            {/* <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10 -mr-2">
               <MoreVertical className="h-5 w-5" />
-            </Button>
+            </Button> */}
           </div>
         </div>
 

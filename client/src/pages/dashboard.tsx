@@ -158,11 +158,11 @@ export default function Dashboard() {
 
         <section>
           <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {[
               { icon: Building2, label: "New Project", href: "/create-project-upload" },
-              { icon: CheckSquare, label: "Add Task", },
-              { icon: Receipt, label: "Add Expense", },
+              { icon: CheckSquare, label: "Add Task", href: "/add-task" },
+              // { icon: Receipt, label: "Add Expense", },
               { icon: FileText, label: "Scan Doc", href: "/scan" },
             ].map((action, i) => (
               <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">

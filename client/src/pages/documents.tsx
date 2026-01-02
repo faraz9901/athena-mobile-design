@@ -68,9 +68,9 @@ export default function Documents() {
               className="pl-9 bg-secondary/30 border-none rounded-xl h-11"
             />
           </div>
-          <Button variant="secondary" size="icon" className="h-11 w-11 rounded-xl shrink-0">
+          {/* <Button variant="secondary" size="icon" className="h-11 w-11 rounded-xl shrink-0">
             <Filter className="h-4 w-4" />
-          </Button>
+          </Button> */}
         </div>
       </div>
 

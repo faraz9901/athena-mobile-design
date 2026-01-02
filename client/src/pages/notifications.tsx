@@ -133,7 +133,7 @@ export default function Notifications() {
           <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
             <TabsTrigger value="tasks" className="text-xs">Tasks</TabsTrigger>
-            <TabsTrigger value="budget" className="text-xs">Budget</TabsTrigger>
+            <TabsTrigger value="budget" className="text-xs">Project</TabsTrigger>
             <TabsTrigger value="system" className="text-xs">System</TabsTrigger>
           </TabsList>
 
