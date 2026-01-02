@@ -32,9 +32,6 @@ export default function Dashboard() {
       onCloseSidebar={() => setSidebarOpen(false)}
       sidebarContent={(
         <div className="space-y-4">
-          <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Quick Actions</p>
-          </div>
           <div className="space-y-2">
             {[
               { icon: Building2, label: "New Project", href: "/create-project-upload" },
