@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { LayoutDashboard, Briefcase, CheckSquare, Plus, File, MessageSquare, Menu, Users as UsersIcon, User, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Briefcase, CheckSquare, Plus, File, MessageSquare, Menu, Users as UsersIcon, User, Settings, LogOut, CreditCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -85,7 +85,8 @@ export function MobileLayout({ children, sidebarOpen, sidebarContent, onCloseSid
                   {[
                     { icon: UsersIcon, label: "Partners", href: "/vendors-partners" },
                     { icon: User, label: "Profile", href: "/profile" },
-                    { icon: Settings, label: "Settings", href: "/profile" },
+                    { icon: CreditCard, label: "Subscription", href: "/subscription" },
+                    { icon: Settings, label: "Settings", href: "/settings" },
                     { icon: LogOut, label: "Logout", onClick: () => { logout(); window.location.href = "/login"; } },
                   ].map((action, i) => (
                     <button

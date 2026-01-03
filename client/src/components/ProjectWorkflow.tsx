@@ -67,6 +67,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Draft",
         title: "Draft Created",
+        date: "01 Jan 2025",
         description: "Tender documents uploaded & reviewed",
         actions: [
             { id: "upload_tender_docs", label: "Upload Tender Docs", type: "upload" },
@@ -76,6 +77,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Tender Submitted",
         title: "Tender Submitted",
+        date: "05 Jan 2025",
         actions: [
             {
                 id: "tender_secured",
@@ -94,6 +96,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Tender Failed",
         title: "Tender Failed",
+        date: "08 Jan 2025",
         actions: [
             { id: "verify_emd_refund", label: "Verify EMD Refund", type: "decision" },
         ],
@@ -101,6 +104,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Tender Secured",
         title: "Tender Secured",
+        date: "10 Jan 2025",
         actions: [
             { id: "upload_bid_comparative", label: "Upload Bid Comparative", type: "upload" },
             { id: "upload_negotiation_letters", label: "Upload Negotiation Letters", type: "upload" },
@@ -110,6 +114,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Project Ready for Execution",
         title: "Execution Ready",
+        date: "15 Jan 2025",
         actions: [
             { id: "upload_loa_work_order", label: "Upload LOA/WO", type: "upload" },
             { id: "performance_security_details", label: "Performance Security", type: "input" },
@@ -121,6 +126,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Active",
         title: "Project Active_Execution",
+        date: "20 Jan 2025",
         actions: [
             { id: "daily_progress_tracking", label: "Daily Progress", type: "button" },
             // { id: "daily_expense_report", label: "Daily Expenses", type: "upload" },
@@ -132,6 +138,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Completed",
         title: "Project Completed",
+        date: "28 Jan 2025",
         actions: [
             { id: "project_completed_check", label: "Final Payment Check", type: "button" },
             { id: "payment_received_check", label: "Payment & Security", type: "decision" },
@@ -140,6 +147,7 @@ const WORKFLOW_FLOW = [
     {
         key: "Closed",
         title: "Workflow Closed",
+        date: "31 Jan 2025",
         actions: [
             { id: "calculate_taxes", label: "Calculate Taxes", type: "button" },
             { id: "mark_taxes_paid", label: "Pay Taxes", type: "decision" },
@@ -151,6 +159,7 @@ const WORKFLOW_FLOW = [
 ] satisfies {
     key: WorkflowStatus;
     title: string;
+    date: string;
     description?: string;
     actions: WorkflowAction[];
 }[];
@@ -288,11 +297,14 @@ export default function ProjectWorkflow({
                                 <h4
                                     onClick={() => setSelectedStep(step.key)}
                                     className={cn(
-                                        "text-sm font-medium cursor-pointer",
+                                        "text-sm font-medium cursor-pointer flex items-center gap-2",
                                         step.key === selectedStep && "text-primary"
                                     )}
                                 >
-                                    {step.title}
+                                    <span className="text-[10px] text-muted-foreground">
+                                        {step.date}
+                                    </span>
+                                    <span>{step.title}</span>
                                 </h4>
 
                                 {step.description && (

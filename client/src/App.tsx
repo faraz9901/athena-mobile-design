@@ -25,6 +25,9 @@ import TaskDetail from "@/pages/task-detail";
 import TaskEdit from "@/pages/task-edit";
 import AddExpense from "@/pages/add-expense";
 import Profile from "@/pages/profile";
+import Subscription from "@/pages/subscription";
+import SettingsPage from "@/pages/settings";
+import EditProfile from "@/pages/edit-profile";
 import { AuthProvider } from "@/lib/auth-context";
 import ProjectPendingTaskPage from "@/pages/ProjectPendingTaskPage";
 import ReportsPage from "@/pages/ReportsPage";
@@ -55,6 +58,9 @@ function Router() {
       <ProtectedRoute path="/partner/:id" component={PartnerEdit} />
       <ProtectedRoute path="/add-partner" component={AddPartner} />
       <ProtectedRoute path="/profile" component={Profile} />
+      <ProtectedRoute path="/edit-profile" component={EditProfile} />
+      <ProtectedRoute path="/subscription" component={Subscription} />
+      <ProtectedRoute path="/settings" component={SettingsPage} />
       <ProtectedRoute path="/create-project-upload" component={CreateProjectUpload} />
       <ProtectedRoute path="/create-project-form" component={CreateProjectForm} />
       <ProtectedRoute path="/create-project-share" component={CreateProjectShare} />

@@ -34,7 +34,7 @@ export const pieData = [
 ]
 
 import { MOCK_PROJECTS } from "@/data/mockProjects";
-import { GanttChart } from "@/components/GanttGraph";
+import GanttGraph2 from "@/components/GanttGraph2";
 
 export default function ProjectDetail() {
   const [match, params] = useRoute("/project/:id");
@@ -329,7 +329,7 @@ export default function ProjectDetail() {
                 <Badge variant="outline" className="text-[10px] px-2 py-0.5">Baseline v/s Actual</Badge>
               </CardHeader>
               <CardContent className="space-y-4">
-                <GanttChart />
+                <GanttGraph2 />
               </CardContent>
             </Card>
 

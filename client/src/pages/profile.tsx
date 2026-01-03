@@ -93,83 +93,6 @@ export default function Profile() {
           </CardContent>
         </Card>
 
-        {/* Plan Details */}
-        <Card className="border-none shadow-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
-              Plan Details
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Plan</span>
-                <Badge variant="default" className="font-semibold">
-                  {mockUser.plan.name}
-                </Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Valid Until</span>
-                <span className="text-sm font-medium">
-                  {new Date(mockUser.plan.expiresAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm text-muted-foreground">Projects</span>
-                  <span className="text-sm font-medium">
-                    {mockUser.plan.projects} / {mockUser.plan.maxProjects}
-                  </span>
-                </div>
-                <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full"
-                    style={{ width: `${(mockUser.plan.projects / mockUser.plan.maxProjects) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm text-muted-foreground">Storage</span>
-                  <span className="text-sm font-medium">
-                    {mockUser.plan.storage} GB / {mockUser.plan.maxStorage} GB
-                  </span>
-                </div>
-                <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full"
-                    style={{ width: `${(mockUser.plan.storage / mockUser.plan.maxStorage) * 100}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-2">
-              <p className="text-sm font-semibold mb-2">Plan Features</p>
-              {planFeatures.pro.map((feature, i) => (
-                <div key={i} className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                  <span>{feature}</span>
-                </div>
-              ))}
-            </div>
-
-            <Button className="w-full rounded-xl" variant="outline">
-              <ArrowRight className="mr-2 h-4 w-4" />
-              Upgrade Plan
-            </Button>
-          </CardContent>
-        </Card>
-
         {/* Personal Information */}
         <Card className="border-none shadow-sm">
           <CardHeader>
@@ -202,9 +125,11 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-            <Button variant="outline" className="w-full rounded-xl">
-              Edit Profile
-            </Button>
+            <Link href="/edit-profile">
+              <Button variant="outline" className="w-full rounded-xl">
+                Edit Profile
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
