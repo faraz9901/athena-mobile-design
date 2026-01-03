@@ -19,6 +19,8 @@ import {
   Download,
   Plus,
   Building2,
+  FileSpreadsheet,
+  Database,
 } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts"
 
@@ -174,7 +176,7 @@ export default function ProjectDetail() {
 
           <TabsContent value="report & analytics" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
-            <div className="flex flex-col gap-3  justify-between bg-muted/40 border rounded-lg px-4 py-6">
+            {/* <div className="flex flex-col gap-3  justify-between bg-muted/40 border rounded-lg px-4 py-6">
               <div>
                 <h3 className="text-sm font-semibold">Project Reports</h3>
                 <p className="text-xs text-muted-foreground">
@@ -183,7 +185,6 @@ export default function ProjectDetail() {
               </div>
 
               <div className="flex gap-2">
-                {/* Live / Interim Report */}
                 <Button
                   size="sm"
                   variant="outline"
@@ -192,7 +193,7 @@ export default function ProjectDetail() {
                   Download Project Report
                 </Button>
 
-                {/* Final Report */}
+
                 <Button
                   size="sm"
                   variant="default"
@@ -202,74 +203,7 @@ export default function ProjectDetail() {
                   Final Project Report
                 </Button>
               </div>
-            </div>
-
-
-            {/* <Card className="border-none shadow-sm">
-              <CardHeader className="pb-2 flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle className="text-base">Financial Summary</CardTitle>
-                  <CardDescription className="text-xs mt-1">High-level view of project profitability</CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => console.log("Download Single Project Report")}>
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground">Contract Value</p>
-                    <p className="text-xl font-bold">Rs {(project.budget.total / 1000000).toFixed(2)}M</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground">Amount Spent</p>
-                    <p className="text-xl font-bold text-orange-600">Rs {(project.budget.spent / 1000000).toFixed(2)}M</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground">Projected Profit</p>
-                    <p className="text-xl font-bold text-emerald-600">Rs 0.48M</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs text-muted-foreground">Expected Margin</p>
-                    <p className="text-xl font-bold">18%</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 text-xs">
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Taxable Amount</p>
-                    <p className="font-semibold">Rs 0.95M</p>
-                    <p className="text-[10px] text-muted-foreground">Before GST & duties</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Taxes Paid</p>
-                    <p className="font-semibold">Rs 0.12M</p>
-                    <p className="text-[10px] text-muted-foreground">GST, TDS, local</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground">Outstanding</p>
-                    <p className="font-semibold text-orange-600">Rs 0.08M</p>
-                    <p className="text-[10px] text-muted-foreground">Expected this quarter</p>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Collection Progress</span>
-                    <span className="font-medium">72%</span>
-                  </div>
-                  <Progress value={72} className="h-2 rounded-full" />
-                  <div className="flex justify-between text-[10px] text-muted-foreground">
-                    <span>Invoiced: Rs 0.86M</span>
-                    <span>Received: Rs 0.62M</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
+            </div> */}
 
             <Card className="border-none shadow-sm">
               <CardHeader className="pb-2">
@@ -340,6 +274,94 @@ export default function ProjectDetail() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <RiskPieChart />
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Project Reports</CardTitle>
+                <CardDescription className="text-xs mt-1">
+                  Export project data in different formats
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-4">
+                {/* Live Report */}
+                <div className="rounded-lg border bg-muted/30 p-3 space-y-2">
+                  <span className="text-xs font-semibold">Project Report (Live)</span>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-9 gap-1"
+                      onClick={() => console.log("LIVE_PDF")}
+                    >
+                      <FileText className="h-4 w-4" />
+                      PDF
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-9 gap-1"
+                      onClick={() => console.log("LIVE_EXCEL")}
+                    >
+                      <FileSpreadsheet className="h-4 w-4" />
+                      Excel
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="h-9 gap-1"
+                      onClick={() => console.log("LIVE_TALLY")}
+                    >
+                      <Database className="h-4 w-4" />
+                      Tally
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Final Report */}
+                <div className="rounded-lg border bg-muted/30 p-3 space-y-2">
+                  <span className="text-xs font-semibold">Final Project Report</span>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <Button
+                      size="sm"
+                      variant="default"
+                      className="h-9 gap-1"
+                      disabled={project.status !== "COMPLETED"}
+                      onClick={() => console.log("FINAL_PDF")}
+                    >
+                      <FileText className="h-4 w-4" />
+                      PDF
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="default"
+                      className="h-9 gap-1"
+                      disabled={project.status !== "COMPLETED"}
+                      onClick={() => console.log("FINAL_EXCEL")}
+                    >
+                      <FileSpreadsheet className="h-4 w-4" />
+                      Excel
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="default"
+                      className="h-9 gap-1"
+                      disabled={project.status !== "COMPLETED"}
+                      onClick={() => console.log("FINAL_TALLY")}
+                    >
+                      <Database className="h-4 w-4" />
+                      Tally
+                    </Button>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
