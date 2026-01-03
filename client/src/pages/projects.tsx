@@ -17,7 +17,7 @@ const projects = [
     statusColor: "bg-emerald-100 text-emerald-700 hover:bg-emerald-100",
     progress: 65,
     dueDate: "Dec 2024",
-    budget: "$1.2M",
+    budget: "Rs 1.2L",
     tags: ["Commercial", "Civil"]
   },
   {
@@ -28,7 +28,7 @@ const projects = [
     statusColor: "bg-blue-100 text-blue-700 hover:bg-blue-100",
     progress: 100,
     dueDate: "Jan 2025",
-    budget: "$4.5M",
+    budget: "Rs 4.5L",
     tags: ["Infrastructure", "Road"]
   },
   {
@@ -39,7 +39,7 @@ const projects = [
     statusColor: "bg-gray-100 text-gray-700 hover:bg-gray-100",
     progress: 15,
     dueDate: "Mar 2025",
-    budget: "$850k",
+    budget: "Rs 85k",
     tags: ["Residential"]
   },
   {
@@ -50,7 +50,7 @@ const projects = [
     statusColor: "bg-purple-100 text-purple-700 hover:bg-purple-100",
     progress: 0,
     dueDate: "Feb 2025",
-    budget: "$2.1M",
+    budget: "Rs 2.1L",
     tags: ["Commercial", "Tech"]
   }
 ];

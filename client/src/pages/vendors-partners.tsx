@@ -77,8 +77,6 @@ export default function VendorsPartners() {
   return (
     <MobileLayout
       title="Partners"
-      fabAction={() => navigate("/add-partner")}
-      fabIcon={<UserPlus className="h-6 w-6" />}
     >
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
         <div className="flex items-center justify-between">
@@ -89,7 +87,20 @@ export default function VendorsPartners() {
               Manage JV & delivery partners per project
             </p>
           </div>
+          {/* <div className="flex justify-end"> */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 px-2 text-[11px]"
+            onClick={() => navigate("/add-partner")}
+          >
+            Add partner
+          </Button>
+          {/* </div> */}
         </div>
+
+
+
 
         <div className="space-y-3">
           <div>
@@ -108,6 +119,7 @@ export default function VendorsPartners() {
               </select>
             </div>
           </div>
+
 
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

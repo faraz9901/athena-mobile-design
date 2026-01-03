@@ -27,6 +27,7 @@ import AddExpense from "@/pages/add-expense";
 import Profile from "@/pages/profile";
 import { AuthProvider } from "@/lib/auth-context";
 import ProjectPendingTaskPage from "@/pages/ProjectPendingTaskPage";
+import ReportsPage from "@/pages/ReportsPage";
 
 import Register from "./pages/register";
 import { ProtectedRoute } from "./lib/protected-route";
@@ -58,6 +59,7 @@ function Router() {
       <ProtectedRoute path="/create-project-form" component={CreateProjectForm} />
       <ProtectedRoute path="/create-project-share" component={CreateProjectShare} />
       <ProtectedRoute path="/projects/:projectId/:pendingTask" component={ProjectPendingTaskPage} />
+      <ProtectedRoute path="/reports" component={ReportsPage} />
       {/* Register/Onboarding might need to be protected but only for logged in users who haven't finished onboarding. 
           For simplicity, making it accessible or protected. Since user needs to be logged in via OTP first, it is protected. */}
       <ProtectedRoute path="/register" component={Register} />

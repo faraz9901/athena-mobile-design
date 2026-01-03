@@ -10,6 +10,11 @@ import {
   MapPin,
   MoreVertical,
   FileText,
+  Calendar,
+  AlertCircle,
+  TrendingUp,
+  LayoutDashboard,
+  FileCheck,
   Share2,
   Download,
   Plus,
@@ -21,37 +26,6 @@ import { Link, useRoute, useLocation } from "wouter";
 import ProjectWorkflow, { WorkflowStatus } from "@/components/ProjectWorkflow";
 import Others from "@/components/Others";
 
-// mockData.ts
-export const ganttData = [
-  {
-    id: 1,
-    name: "Design & Approvals",
-    start: 0,
-    baseline: 30,
-    actual: 35,
-    color: "bg-blue-500",
-    timeline: "Jan - Mar",
-  },
-  {
-    id: 2,
-    name: "Foundation & Structure",
-    start: 30,
-    baseline: 55,
-    actual: 60,
-    color: "bg-emerald-500",
-    timeline: "Mar - Aug",
-  },
-  {
-    id: 3,
-    name: "Finishes & Handover",
-    start: 65,
-    baseline: 40,
-    actual: 32,
-    color: "bg-orange-500",
-    timeline: "Sep - Dec",
-  },
-]
-
 export const pieData = [
   { name: "Critical Path", value: 28 },
   { name: "Dependencies", value: 22 },
@@ -59,23 +33,29 @@ export const pieData = [
   { name: "Reporting", value: 16 },
 ]
 
+import { MOCK_PROJECTS } from "@/data/mockProjects";
+import { GanttChart } from "@/components/GanttGraph";
+
 export default function ProjectDetail() {
   const [match, params] = useRoute("/project/:id");
   const projectId = params?.id;
   const [, navigate] = useLocation();
 
-  // Mock data - normally would fetch based on ID
+  // Find project from mock data
+  const projectData = MOCK_PROJECTS.find(p => p.id === projectId);
+
+  // Fallback or derived data
   const project = {
-    title: "City Center Mall Renovation",
-    status: "Active",
+    title: projectData?.name || "City Center Mall Renovation",
+    status: projectData?.status || "Active",
     department: "Urban Development Authority",
     tenderId: "TDR-2024-892",
-    location: "Downtown District, Metro City",
+    location: projectData?.location || "Downtown District, Metro City",
     progress: 65,
     budget: {
-      total: 1200000,
+      total: projectData?.totalAmount || 1200000,
       spent: 450000,
-      remaining: 750000
+      remaining: (projectData?.totalAmount || 1200000) - 450000
     },
     dates: {
       start: "01 Jan 2025",
@@ -127,7 +107,7 @@ export default function ProjectDetail() {
           <div className="pt-4 grid grid-cols-2 gap-4">
             <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
               <p className="text-[10px] opacity-70 uppercase tracking-wider font-bold">Spent Budget</p>
-              <p className="text-lg font-bold mt-1">${(project.budget.spent / 1000).toFixed(0)}k</p>
+              <p className="text-lg font-bold mt-1">Rs.{(project.budget.spent / 1000).toFixed(0)}k</p>
               <Progress value={(project.budget.spent / project.budget.total) * 100} className="h-1 mt-2 bg-white/20" />
             </div>
             <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
@@ -193,34 +173,65 @@ export default function ProjectDetail() {
           </TabsContent>
 
           <TabsContent value="report & analytics" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <Card className="border-none shadow-sm">
+
+            <div className="flex flex-col gap-3  justify-between bg-muted/40 border rounded-lg px-4 py-6">
+              <div>
+                <h3 className="text-sm font-semibold">Project Reports</h3>
+                <p className="text-xs text-muted-foreground">
+                  Generate live or final reports for this project
+                </p>
+              </div>
+
+              <div className="flex gap-2">
+                {/* Live / Interim Report */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => console.log("INTERIM")}
+                >
+                  Download Project Report
+                </Button>
+
+                {/* Final Report */}
+                <Button
+                  size="sm"
+                  variant="default"
+                  disabled={project.status !== "COMPLETED"}
+                  onClick={() => console.log("FINAL")}
+                >
+                  Final Project Report
+                </Button>
+              </div>
+            </div>
+
+
+            {/* <Card className="border-none shadow-sm">
               <CardHeader className="pb-2 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-base">Financial Summary</CardTitle>
                   <CardDescription className="text-xs mt-1">High-level view of project profitability</CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg">
+                  <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg" onClick={() => console.log("Download Single Project Report")}>
                     <Download className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg">
-                    <Share2 className="h-4 w-4" />
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
+
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground">Contract Value</p>
-                    <p className="text-xl font-bold">${(project.budget.total / 1000000).toFixed(2)}M</p>
+                    <p className="text-xl font-bold">Rs {(project.budget.total / 1000000).toFixed(2)}M</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground">Amount Spent</p>
-                    <p className="text-xl font-bold text-orange-600">${(project.budget.spent / 1000000).toFixed(2)}M</p>
+                    <p className="text-xl font-bold text-orange-600">Rs {(project.budget.spent / 1000000).toFixed(2)}M</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground">Projected Profit</p>
-                    <p className="text-xl font-bold text-emerald-600">$0.48M</p>
+                    <p className="text-xl font-bold text-emerald-600">Rs 0.48M</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground">Expected Margin</p>
@@ -231,17 +242,17 @@ export default function ProjectDetail() {
                 <div className="grid grid-cols-3 gap-3 text-xs">
                   <div className="space-y-1">
                     <p className="text-muted-foreground">Taxable Amount</p>
-                    <p className="font-semibold">$0.95M</p>
+                    <p className="font-semibold">Rs 0.95M</p>
                     <p className="text-[10px] text-muted-foreground">Before GST & duties</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground">Taxes Paid</p>
-                    <p className="font-semibold">$0.12M</p>
+                    <p className="font-semibold">Rs 0.12M</p>
                     <p className="text-[10px] text-muted-foreground">GST, TDS, local</p>
                   </div>
                   <div className="space-y-1">
                     <p className="text-muted-foreground">Outstanding</p>
-                    <p className="font-semibold text-orange-600">$0.08M</p>
+                    <p className="font-semibold text-orange-600">Rs 0.08M</p>
                     <p className="text-[10px] text-muted-foreground">Expected this quarter</p>
                   </div>
                 </div>
@@ -253,12 +264,12 @@ export default function ProjectDetail() {
                   </div>
                   <Progress value={72} className="h-2 rounded-full" />
                   <div className="flex justify-between text-[10px] text-muted-foreground">
-                    <span>Invoiced: $0.86M</span>
-                    <span>Received: $0.62M</span>
+                    <span>Invoiced: Rs 0.86M</span>
+                    <span>Received: Rs 0.62M</span>
                   </div>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             <Card className="border-none shadow-sm">
               <CardHeader className="pb-2">
@@ -344,41 +355,6 @@ export default function ProjectDetail() {
   );
 }
 
-
-function GanttChart() {
-  return (
-    <div className="space-y-4">
-      {ganttData.map((phase) => (
-        <div key={phase.id} className="space-y-1">
-          <div className="flex justify-between text-xs">
-            <span className="font-medium">{phase.name}</span>
-            <span className="text-muted-foreground">{phase.timeline}</span>
-          </div>
-
-          <div className="relative h-4 rounded-full bg-secondary overflow-hidden">
-            {/* Baseline */}
-            <div
-              className={`absolute inset-y-0 ${phase.color} opacity-40`}
-              style={{
-                left: `${phase.start}%`,
-                width: `${phase.baseline}%`,
-              }}
-            />
-
-            {/* Actual */}
-            <div
-              className={`absolute inset-y-0 ${phase.color}`}
-              style={{
-                left: `${phase.start}%`,
-                width: `${phase.actual}%`,
-              }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 const COLORS = ["#ef4444", "#f59e0b", "#10b981", "#38bdf8"]
 

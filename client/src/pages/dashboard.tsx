@@ -89,7 +89,7 @@ export default function Dashboard() {
             <Card className="bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-900/30 shadow-sm">
               <CardContent className="p-3 flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">$42k</span>
+                  <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">Rs.42k</span>
                   <p className="text-xs text-emerald-600/80 font-medium">Mo. Expenses</p>
                 </div>
                 <div className="p-2 bg-emerald-100 dark:bg-emerald-800/40 rounded-full">
@@ -158,11 +158,11 @@ export default function Dashboard() {
 
         <section>
           <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {[
               { icon: Building2, label: "New Project", href: "/create-project-upload" },
               { icon: CheckSquare, label: "Add Task", href: "/add-task" },
-              // { icon: Receipt, label: "Add Expense", },
+              { icon: FileText, label: "Reports", href: "/reports" },
               { icon: FileText, label: "Scan Doc", href: "/scan" },
             ].map((action, i) => (
               <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">

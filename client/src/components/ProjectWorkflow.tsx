@@ -92,64 +92,62 @@ const WORKFLOW_FLOW = [
         ],
     },
     {
+        key: "Tender Failed",
+        title: "Tender Failed",
+        actions: [
+            { id: "verify_emd_refund", label: "Verify EMD Refund", type: "decision" },
+        ],
+    },
+    {
         key: "Tender Secured",
         title: "Tender Secured",
         actions: [
-            { id: "upload_loa", label: "Upload LOA / Work Order", type: "upload" },
-            {
-                id: "security_deposit_details",
-                label: "Security Deposit Amount",
-                type: "input",
-                placeholder: "Enter amount",
-            },
+            { id: "upload_bid_comparative", label: "Upload Bid Comparative", type: "upload" },
+            { id: "upload_negotiation_letters", label: "Upload Negotiation Letters", type: "upload" },
+            { id: "negotiation_decision", label: "Negotiation Outcome", type: "decision", variant: "primary" },
         ],
     },
     {
         key: "Project Ready for Execution",
         title: "Execution Ready",
         actions: [
-            { id: "upload_drawings", label: "Upload Drawings", type: "upload" },
-            {
-                id: "set_project_dates",
-                label: "Start Project",
-                type: "button",
-                variant: "primary",
-            },
+            { id: "upload_loa_work_order", label: "Upload LOA/WO", type: "upload" },
+            { id: "performance_security_details", label: "Performance Security", type: "input" },
+            { id: "upload_performance_security", label: "Upload Security Doc", type: "upload" },
+            { id: "upload_project_drawings", label: "Upload Drawings", type: "upload" },
+            { id: "review_final_data", label: "Review Final Data", type: "button" },
         ],
     },
     {
         key: "Active",
-        title: "Project Active",
+        title: "Project Active_Execution",
         actions: [
-            { id: "upload_daily_photos", label: "Upload Daily Photos", type: "upload" },
-            {
-                id: "running_bill_received",
-                label: "Running Bill Amount",
-                type: "input",
-                placeholder: "Enter amount",
-            },
+            { id: "daily_progress_tracking", label: "Daily Progress", type: "button" },
+            // { id: "daily_expense_report", label: "Daily Expenses", type: "upload" },
             { id: "send_whatsapp_summary", label: "Send WhatsApp Summary", type: "whatsapp" },
-            {
-                id: "mark_project_completed",
-                label: "Mark Project Completed",
-                type: "button",
-                variant: "primary",
-            },
+            { id: "running_bill_received", label: "Running Bill Received", type: "input" },
+            { id: "check_project_timeline", label: "Can the project be completed on time?", type: "decision" },
         ],
     },
     {
         key: "Completed",
         title: "Project Completed",
         actions: [
-            { id: "calculate_taxes", label: "Calculate Taxes", type: "button" },
-            { id: "generate_delay_email", label: "Generate Delay Email", type: "email" },
+            { id: "project_completed_check", label: "Final Payment Check", type: "button" },
+            { id: "payment_received_check", label: "Payment & Security", type: "decision" },
         ],
     },
     {
         key: "Closed",
         title: "Workflow Closed",
-        actions: [],
-    },
+        actions: [
+            { id: "calculate_taxes", label: "Calculate Taxes", type: "button" },
+            { id: "mark_taxes_paid", label: "Pay Taxes", type: "decision" },
+            { id: "calculate_profit", label: "Final Profit", type: "button" },
+            { id: "mark_project_done", label: "Close Project", type: "decision" },
+            { id: "download_final_report", label: "Download Final Report", type: "decision" }
+        ],
+    }
 ] satisfies {
     key: WorkflowStatus;
     title: string;
@@ -159,7 +157,7 @@ const WORKFLOW_FLOW = [
 
 /* =========================
    Helpers
-========================= */
+ ========================= */
 
 type StepState = "completed" | "current" | "pending";
 
@@ -171,7 +169,7 @@ function resolveStepState(index: number, currentIndex: number): StepState {
 
 /* =========================
    Props (UNCHANGED)
-========================= */
+ ========================= */
 
 interface ProjectWorkflowProps {
     projectId?: string | null;
@@ -180,7 +178,7 @@ interface ProjectWorkflowProps {
 
 /* =========================
    DROP-IN COMPONENT
-========================= */
+ ========================= */
 
 export default function ProjectWorkflow({
     projectId,
@@ -193,12 +191,24 @@ export default function ProjectWorkflow({
 
     // 🔥 DEMO STATE: click any step to preview its actions
     const [selectedStep, setSelectedStep] =
-        useState<WorkflowStatus>(projectStatus);
+        useState<string | undefined>(undefined);
+
+    // Initial effect to select the current status
+    useMemo(() => {
+        const currentFlow = WORKFLOW_FLOW.find(f => f.key === projectStatus);
+        if (currentFlow) setSelectedStep(currentFlow.key);
+    }, [projectStatus]);
 
     const [, setLocation] = useLocation();
 
     function handleActionClick(actionId: string) {
         if (!projectId) return;
+        // Correct route to match PendingTaskPage
+
+        if (actionId === "tender_secured") {
+            return
+        }
+
         setLocation(`/projects/${projectId}/${actionId}`);
     }
 

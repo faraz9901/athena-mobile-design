@@ -58,6 +58,12 @@ export default function ProjectPendingTaskPage() {
         }));
     };
 
+    // Helper to check conditions
+    const checkCondition = (condition: any) => {
+        if (!condition) return true;
+        return formData[condition.field] === condition.value;
+    };
+
     return (
         <MobileLayout showBottomNav={false}>
             {/* Header */}
@@ -82,19 +88,75 @@ export default function ProjectPendingTaskPage() {
                     <CardHeader>
                         <CardTitle className="text-base">Task Details</CardTitle>
                         <CardDescription>
-                            Complete the following information to proceed.
+                            Complete the following to proceed.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                         {taskConfig.fields.length === 0 && (
                             <p className="text-sm text-muted-foreground italic">
-                                No additional information required for this step. Click Save & Continue to proceed.
+                                No additional information required. Click Save to proceed.
                             </p>
                         )}
 
                         {taskConfig.fields.map((field, index) => {
                             const fieldKey = `field_${index}`;
                             const f = field as any;
+
+                            if (!checkCondition(f.condition)) return null;
+
+                            // Special handling for info_action (Button)
+                            if (f.type === "info_action") {
+                                return (
+                                    <div key={index} className="pt-2">
+                                        <Label className="block mb-2">{f.label}</Label>
+                                        <Button
+                                            variant="secondary"
+                                            className="w-full justify-between"
+                                            onClick={() => {
+                                                // Handle navigation if link is provided
+                                                if (f.link) {
+                                                    setLocation(`/project/${projectId}/task/${f.link}`);
+                                                } else {
+                                                    console.log("Action triggered:", f.actionLabel);
+                                                }
+                                            }}
+                                        >
+                                            {f.actionLabel}
+                                            <Save className="h-4 w-4 ml-2 opacity-50" />
+                                        </Button>
+                                    </div>
+                                );
+                            }
+
+                            if (f.type === "info") {
+                                return (
+                                    <div key={index} className="p-3 bg-muted rounded-lg text-sm text-muted-foreground">
+                                        {f.label}
+                                    </div>
+                                );
+                            }
+
+                            // Decision Buttons (Yes/No style)
+                            if (f.type === "decision") {
+                                return (
+                                    <div key={index} className="space-y-3">
+                                        <Label className="text-base font-medium">{f.label}</Label>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            {f.options?.map((opt: string) => (
+                                                <Button
+                                                    key={opt}
+                                                    type="button"
+                                                    variant={formData[f.label] === opt ? "default" : "outline"}
+                                                    className={formData[f.label] === opt ? "shadow-md" : "border-dashed"}
+                                                    onClick={() => handleChange(f.label, opt)}
+                                                >
+                                                    {opt}
+                                                </Button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            }
 
                             switch (field.type) {
                                 case "text":
@@ -107,6 +169,8 @@ export default function ProjectPendingTaskPage() {
                                                 id={fieldKey}
                                                 type={field.type}
                                                 placeholder={f.label}
+                                                value={formData[f.label] || ''}
+                                                readOnly={f.readOnly}
                                                 onChange={(e) => handleChange(f.label, e.target.value)}
                                             />
                                         </div>
@@ -120,6 +184,7 @@ export default function ProjectPendingTaskPage() {
                                                 id={fieldKey}
                                                 placeholder={f.label}
                                                 className="min-h-[100px]"
+                                                value={formData[f.label] || ''}
                                                 onChange={(e) => handleChange(f.label, e.target.value)}
                                             />
                                         </div>
@@ -146,6 +211,7 @@ export default function ProjectPendingTaskPage() {
                                         <div key={index} className="flex items-center space-x-2">
                                             <Checkbox
                                                 id={fieldKey}
+                                                checked={!!formData[f.label]}
                                                 onCheckedChange={(checked) => handleChange(f.label, checked)}
                                             />
                                             <Label htmlFor={fieldKey}>{f.label}</Label>
@@ -157,6 +223,7 @@ export default function ProjectPendingTaskPage() {
                                         <div key={index} className="space-y-3">
                                             <Label>{f.label}</Label>
                                             <RadioGroup
+                                                value={formData[f.label]}
                                                 onValueChange={(val) => handleChange(f.label, val)}
                                             >
                                                 {f.options?.map((opt: string) => (

@@ -37,8 +37,8 @@ const mockExtractedData = {
   startDate: "2024-03-15",
   endDate: "2024-09-15",
   applicableTaxes: [
-    { name: "GST", percentage: "18" },
-    { name: "Service Tax", percentage: "5" }
+    { name: "GST", percentage: "18", disabled: true },
+    { name: "Service Tax", percentage: "5", disabled: false }
   ]
 };
 
@@ -78,7 +78,7 @@ export default function CreateProjectForm() {
   const addTax = () => {
     setFormData(prev => ({
       ...prev,
-      taxes: [...prev.taxes, { name: "", percentage: "" }]
+      taxes: [...prev.taxes, { name: "", percentage: "", disabled: false }]
     }));
   };
 
@@ -410,6 +410,7 @@ export default function CreateProjectForm() {
                       onChange={(e) => handleTaxChange(index, "name", e.target.value)}
                       className="h-10 rounded-xl"
                       placeholder="e.g., GST"
+                      disabled={tax.disabled}
                     />
                   </div>
                   <div className="w-24 space-y-2">
@@ -422,6 +423,7 @@ export default function CreateProjectForm() {
                         onChange={(e) => handleTaxChange(index, "percentage", e.target.value)}
                         className="h-10 rounded-xl pr-9"
                         placeholder="0"
+                        disabled={tax.disabled}
                       />
                     </div>
                   </div>
@@ -430,6 +432,7 @@ export default function CreateProjectForm() {
                       type="button"
                       variant="ghost"
                       size="icon"
+                      disabled={tax.disabled}
                       onClick={() => removeTax(index)}
                       className="h-10 w-10 mt-6"
                     >
