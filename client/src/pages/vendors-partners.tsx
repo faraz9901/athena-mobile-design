@@ -77,7 +77,7 @@ export default function VendorsPartners() {
   return (
     <MobileLayout
       title="Partners"
-      fabAction={() => { }}
+      fabAction={() => navigate("/add-partner")}
       fabIcon={<UserPlus className="h-6 w-6" />}
     >
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
@@ -191,11 +191,18 @@ export default function VendorsPartners() {
 
         {filteredPartners.length === 0 && (
           <Card className="border-dashed">
-            <CardContent className="p-8 text-center">
-              <UserPlus className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+            <CardContent className="p-8 text-center space-y-3">
+              <UserPlus className="h-12 w-12 mx-auto text-muted-foreground mb-1" />
               <p className="text-sm text-muted-foreground">
                 No partners configured for this project yet
               </p>
+              <Button
+                size="sm"
+                className="mt-1"
+                onClick={() => navigate("/add-partner")}
+              >
+                Add partner
+              </Button>
             </CardContent>
           </Card>
         )}

@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
+import {
   ArrowLeft,
   Paperclip,
   Send,
@@ -62,7 +62,7 @@ export default function TaskDetail() {
   const [, setLocation] = useLocation();
   const [match, params] = useRoute("/task/:id");
   const taskId = params?.id;
-  
+
   const [newComment, setNewComment] = useState("");
   const [priority, setPriority] = useState(mockTask.priority);
   const [status, setStatus] = useState(mockTask.status);
@@ -236,7 +236,7 @@ export default function TaskDetail() {
         </Card>
 
         {/* Comments */}
-        <Card className="border-none shadow-sm">
+        {/* <Card className="border-none shadow-sm">
           <CardContent className="p-4 space-y-4">
             <Label className="text-base font-semibold flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
@@ -279,9 +279,8 @@ export default function TaskDetail() {
               Post Comment
             </Button>
           </CardContent>
-        </Card>
-
-        <div className="h-8"></div>
+        </Card> */}
+        <div className="h-8" />
       </div>
     </MobileLayout>
   );

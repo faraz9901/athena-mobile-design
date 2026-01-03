@@ -63,6 +63,17 @@ function Others() {
                 </AccordionTrigger>
 
                 <AccordionContent className="pb-4">
+                    <div className="flex items-center justify-between px-3 mb-2">
+                        <p className="text-xs text-muted-foreground">Partners linked to this project</p>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 px-2 text-[11px]"
+                            onClick={() => navigate("/add-partner")}
+                        >
+                            Add partner
+                        </Button>
+                    </div>
                     <div className="space-y-3">
                         {projectPartners.map((partner) => (
                             <div

@@ -34,8 +34,8 @@ export default function CreateProjectShare() {
     share: string;
     avatar?: string;
   }>>([
-    { id: "1", name: "John Doe", email: "john@example.com", share: "60" },
-    { id: "2", name: "Jane Smith", email: "jane@example.com", share: "40" }
+    { id: "1", name: "John Doe (you)", email: "john@example.com", share: "60", avatar: "JD" },
+    { id: "2", name: "Jane Smith", email: "jane@example.com", share: "40", avatar: "JS" }
   ]);
 
   const handleShareChange = (partnerId: string, value: string) => {
@@ -106,10 +106,10 @@ export default function CreateProjectShare() {
                 <RadioGroupItem value="fixed" id="fixed" className="mt-0.5" />
                 <div className="flex-1">
                   <Label htmlFor="fixed" className="text-base font-medium cursor-pointer">
-                    Fixed Share
+                    Single Owner
                   </Label>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Fixed percentage distribution among partners
+                    One owner with full control and profit
                   </p>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export default function CreateProjectShare() {
                     Partnership
                   </Label>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Dynamic partnership with profit sharing
+                    Multiple owners with shared control and profit distribution among partners
                   </p>
                 </div>
               </div>
@@ -131,119 +131,121 @@ export default function CreateProjectShare() {
         </Card>
 
         {/* Partners List */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">Partners</Label>
-              {shareType === "partnership" && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={addPartner}
-                  className="h-8 text-xs"
-                  disabled={partners.length >= mockPartners.length}
-                >
-                  <UserPlus className="mr-1.5 h-3.5 w-3.5" />
-                  Add Partner
-                </Button>
-              )}
-            </div>
-
-            <div className="space-y-3">
-              {partners.map((partner) => (
-                <Card key={partner.id} className="border shadow-sm">
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
-                            {partner.avatar}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium">{partner.name}</p>
-                            <p className="text-xs text-muted-foreground">{partner.email}</p>
-                          </div>
-                        </div>
-                        {shareType === "partnership" && partners.length > 1 && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removePartner(partner.id)}
-                            className="h-8 w-8"
-                          >
-                            <span className="text-lg">×</span>
-                          </Button>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor={`share-${partner.id}`}>
-                          Share Percentage
-                        </Label>
-                        <div className="relative">
-                          <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id={`share-${partner.id}`}
-                            type="number"
-                            value={partner.share}
-                            onChange={(e) => handleShareChange(partner.id, e.target.value)}
-                            className="h-11 rounded-xl pr-9"
-                            placeholder="0"
-                            min="0"
-                            max="100"
-                            disabled={shareType === "fixed"}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* Total Share Indicator */}
-            {shareType === "partnership" && (
-              <div className="pt-2">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/30">
-                  <div className="flex items-center gap-2">
-                    <Percent className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Total Share</span>
-                  </div>
-                  <Badge
-                    variant={totalShare === 100 ? "default" : "destructive"}
-                    className="text-sm font-semibold"
-                  >
-                    {totalShare.toFixed(1)}%
-                  </Badge>
+        {shareType === "partnership" && (
+          <>
+            <Card className="border-none shadow-sm">
+              <CardContent className="p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-base font-semibold">Partners</Label>
+                  {shareType === "partnership" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={addPartner}
+                      className="h-8 text-xs"
+                      disabled={partners.length >= mockPartners.length}
+                    >
+                      <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+                      Add Partner
+                    </Button>
+                  )}
                 </div>
-                {totalShare !== 100 && (
-                  <div className="flex items-center gap-2 mt-2 text-xs text-destructive">
-                    <AlertCircle className="h-3.5 w-3.5" />
-                    <span>Total share must equal 100%</span>
+
+                <div className="space-y-3">
+                  {partners.map((partner) => (
+                    <Card key={partner.id} className="border shadow-sm">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                                {partner.avatar}
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium">{partner.name}</p>
+                                <p className="text-xs text-muted-foreground">{partner.email}</p>
+                              </div>
+                            </div>
+                            {shareType === "partnership" && partners.length > 1 && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removePartner(partner.id)}
+                                className="h-8 w-8"
+                              >
+                                <span className="text-lg">×</span>
+                              </Button>
+                            )}
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor={`share-${partner.id}`}>
+                              Share Percentage
+                            </Label>
+                            <div className="relative">
+                              <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                id={`share-${partner.id}`}
+                                type="number"
+                                value={partner.share}
+                                onChange={(e) => handleShareChange(partner.id, e.target.value)}
+                                className="h-11 rounded-xl pr-9"
+                                placeholder="0"
+                                min="0"
+                                max="100"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {/* Total Share Indicator */}
+                {shareType === "partnership" && (
+                  <div className="pt-2">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/30">
+                      <div className="flex items-center gap-2">
+                        <Percent className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm font-medium">Total Share</span>
+                      </div>
+                      <Badge
+                        variant={totalShare === 100 ? "default" : "destructive"}
+                        className="text-sm font-semibold"
+                      >
+                        {totalShare.toFixed(1)}%
+                      </Badge>
+                    </div>
+                    {totalShare !== 100 && (
+                      <div className="flex items-center gap-2 mt-2 text-xs text-destructive">
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        <span>Total share must equal 100%</span>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Info Note */}
-        <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800/30">
-          <CardContent className="p-4">
-            <div className="flex gap-3">
-              <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-1">
-                  Important Note
-                </p>
-                <p className="text-xs text-amber-800/80 dark:text-amber-300/80">
-                  Only the project owner can edit share settings later.
-                  Make sure all information is correct before confirming.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Info Note */}
+            <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800/30">
+              <CardContent className="p-4">
+                <div className="flex gap-3">
+                  <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-1">
+                      Important Note
+                    </p>
+                    <p className="text-xs text-amber-800/80 dark:text-amber-300/80">
+                      Only the project owner can edit share settings later.
+                      Make sure all information is correct before confirming.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>)}
 
         {/* Profit Preview (if partnership) */}
         {shareType === "partnership" && totalShare === 100 && (

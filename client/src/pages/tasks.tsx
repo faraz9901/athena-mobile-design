@@ -5,6 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, MoreHorizontal, Calendar, AlertCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLocation } from "wouter";
 
@@ -54,10 +60,14 @@ const tasks = [
 export default function Tasks() {
   const projectNames = Array.from(new Set(tasks.map((t) => t.project)));
   const [selectedProject, setSelectedProject] = useState<string>(projectNames[0] ?? "");
-  const [, navigate] = useLocation()
+  const [, navigate] = useLocation();
 
   return (
-    <MobileLayout title="Tasks" fabAction={() => { }} fabIcon={<Plus className="h-6 w-6" />}>
+    <MobileLayout
+      title="Tasks"
+      fabAction={() => navigate("/add-task")}
+      fabIcon={<Plus className="h-6 w-6" />}
+    >
       <div className="sticky top-0 bg-background z-20 pt-6 pb-3 px-5 space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Task Board</h1>
@@ -108,20 +118,55 @@ export default function Tasks() {
                 tasks
                   .filter((t) => t.status === status && t.project === selectedProject)
                   .map((task) => (
-                    <Card key={task.id} onClick={() => navigate(`/task/${task.id}`)} className="border-none shadow-sm ring-1 ring-black/5">
+                    <Card
+                      key={task.id}
+                      onClick={() => navigate(`/task/${task.id}`)}
+                      className="border-none shadow-sm ring-1 ring-black/5"
+                    >
                       <CardContent className="p-4 pb-2">
                         <div className="flex justify-between items-start mb-2">
-                          <Badge variant="outline" className={`
+                          <Badge
+                            variant="outline"
+                            className={`
                           ${task.priority === 'High' ? 'bg-red-50 text-red-600 border-red-100' :
-                              task.priority === 'Medium' ? 'bg-orange-50 text-orange-600 border-orange-100' :
-                                'bg-blue-50 text-blue-600 border-blue-100'}
+                                task.priority === 'Medium' ? 'bg-orange-50 text-orange-600 border-orange-100' :
+                                  'bg-blue-50 text-blue-600 border-blue-100'}
                           border-none font-medium
-                        `}>
+                        `}
+                          >
                             {task.priority}
                           </Badge>
-                          <Button variant="ghost" size="icon" className="h-6 w-6 -mr-2 text-muted-foreground">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-6 w-6 -mr-2 text-muted-foreground"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/task/${task.id}/edit`);
+                                }}
+                              >
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="text-destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  // Mock-only: remove not implemented yet
+                                }}
+                              >
+                                Remove
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                         <h3 className="font-semibold text-base leading-snug mb-1">{task.title}</h3>
                         <p className="text-xs text-muted-foreground">{task.project}</p>
