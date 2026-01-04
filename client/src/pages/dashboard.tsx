@@ -14,10 +14,10 @@ import {
   FileText,
   BriefcaseIcon,
   Menu,
+  FileStack,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
-import { useAuth } from "@/lib/auth-context";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -27,7 +27,6 @@ export default function Dashboard() {
     <MobileLayout
       sidebarOpen={sidebarOpen}
       onCloseSidebar={() => setSidebarOpen(false)}
-      showSidebarToggle={false}
     >
       {/* Top App Bar Area */}
       <header className="px-6 pt-8 pb-4 bg-background sticky top-0 z-30 flex items-center justify-between">
@@ -163,7 +162,7 @@ export default function Dashboard() {
               { icon: Building2, label: "New Project", href: "/create-project-upload" },
               { icon: CheckSquare, label: "Add Task", href: "/add-task" },
               { icon: FileText, label: "Reports", href: "/reports" },
-              { icon: FileText, label: "Scan Doc", href: "/scan" },
+              { icon: FileStack, label: "Documents", href: "/documents" },
             ].map((action, i) => (
               <button key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-secondary/30 hover:bg-secondary/60 transition-colors">
                 <div onClick={() => action.href && navigate(action.href)} className="h-10 w-10 rounded-full bg-background shadow-sm flex items-center justify-center text-primary">

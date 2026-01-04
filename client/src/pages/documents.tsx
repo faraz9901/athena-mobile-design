@@ -8,6 +8,7 @@ import {
   Filter,
   Camera,
   MoreVertical,
+  Menu,
 } from "lucide-react";
 import { DocumentsType } from "@/types/documents.types";
 
@@ -63,6 +64,7 @@ const documents: DocumentItem[] = [
 const projects = Array.from(new Set(documents.map((doc) => doc.project)));
 
 export default function Documents() {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [projectFilter, setProjectFilter] = React.useState<string | "all">("all");
   const [documentTypeFilter, setDocumentTypeFilter] = React.useState<DocumentsType | "all">("all");
@@ -83,10 +85,26 @@ export default function Documents() {
   });
 
   return (
-    <MobileLayout title="Documents" fabAction={() => { }} fabIcon={<Camera className="h-6 w-6" />}>
+    <MobileLayout
+      title="Documents"
+      sidebarOpen={sidebarOpen}
+      onCloseSidebar={() => setSidebarOpen(false)}
+      fabAction={() => { }}
+      fabIcon={<Camera className="h-6 w-6" />}
+    >
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Documents</h1>
+          <div className="flex items-center gap-3">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-bold">Documents</h1>
+          </div>
           {/* <Button variant="outline" size="sm" className="h-8 rounded-full">
             <FolderOpen className="mr-2 h-3.5 w-3.5" /> Folders
           </Button> */}

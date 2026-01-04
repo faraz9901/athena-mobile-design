@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation, Link } from "wouter";
-import { LayoutDashboard, Briefcase, CheckSquare, Plus, File, MessageSquare, Menu, Users as UsersIcon, User, Settings, LogOut, CreditCard } from "lucide-react";
+import { LayoutDashboard, Briefcase, CheckSquare, Plus, File, MessageSquare, Menu, Users as UsersIcon, User, Settings, LogOut, CreditCard, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,113 +12,102 @@ interface MobileLayoutProps {
   showProfile?: boolean;
   fabAction?: () => void;
   fabIcon?: React.ReactNode;
-  sidebarOpen?: boolean; // optional external control
+  sidebarOpen?: boolean; // external control
   sidebarContent?: React.ReactNode; // optional override
-  onCloseSidebar?: () => void; // optional external handler
+  onCloseSidebar?: () => void; // external handler
   showBottomNav?: boolean;
-  showSidebarToggle?: boolean; // kept for backward compat, defaults to true
-  onOpenSidebar?: () => void; // optional external handler
 }
 
-export function MobileLayout({ children, sidebarOpen, sidebarContent, onCloseSidebar, showBottomNav = true, showSidebarToggle = true, onOpenSidebar }: MobileLayoutProps) {
+export function MobileLayout({ children, sidebarOpen, sidebarContent, onCloseSidebar, showBottomNav = true }: MobileLayoutProps) {
   const [location] = useLocation();
   const { logout } = useAuth();
-  const [internalSidebarOpen, setInternalSidebarOpen] = useState(false);
-
-  const isSidebarOpen = sidebarOpen ?? internalSidebarOpen;
-  const handleOpenSidebar = () => {
-    if (onOpenSidebar) onOpenSidebar();
-    else setInternalSidebarOpen(true);
-  };
+  const isSidebarOpen = !!sidebarOpen;
   const handleCloseSidebar = () => {
     if (onCloseSidebar) onCloseSidebar();
-    else setInternalSidebarOpen(false);
   };
 
   const navItems = [
     { icon: LayoutDashboard, label: "Home", href: "/" },
     { icon: Briefcase, label: "Projects", href: "/projects" },
+    { icon: Camera, label: "Scan Doc", href: "/scan" },
     { icon: CheckSquare, label: "Tasks", href: "/tasks" },
     { icon: MessageSquare, label: "Chat", href: "/chat" },
-    { icon: File, label: "Documents", href: "/documents" },
   ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto relative shadow-2xl overflow-hidden border-x border-border/40">
-
-      {showSidebarToggle && (
-        <div className=" z-40">
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            className="bg-background/80 shadow-sm border rounded-t-none rounded-l border-border/40"
-            onClick={handleOpenSidebar}
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
 
       {/* Content Area - Scrollable */}
       <main className="flex-1 overflow-y-auto pb-24 no-scrollbar">
         {children}
       </main>
 
-      {isSidebarOpen && (
-        <div className="fixed inset-0 z-50 flex max-w-md mx-auto">
-          <div className="w-64 max-w-[75%] bg-background border-l border-border/60 shadow-xl p-4 space-y-4">
-            {sidebarContent ?? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground font-medium">Welcome back,</p>
-                    <h1 className="text-lg font-bold text-foreground leading-tight">John Doe</h1>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  {[
-                    { icon: UsersIcon, label: "Partners", href: "/vendors-partners" },
-                    { icon: User, label: "Profile", href: "/profile" },
-                    { icon: CreditCard, label: "Subscription", href: "/subscription" },
-                    { icon: Settings, label: "Settings", href: "/settings" },
-                    { icon: LogOut, label: "Logout", onClick: () => { logout(); window.location.href = "/login"; } },
-                  ].map((action, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        handleCloseSidebar();
-                        if (action.href) {
-                          window.location.href = action.href;
-                        } else if (action.onClick) {
-                          action.onClick();
-                        }
-                      }}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/40 text-sm"
-                    >
-                      <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-primary">
-                        <action.icon className="h-4 w-4" />
-                      </div>
-                      <span className="flex-1 text-left font-medium text-foreground">{action.label}</span>
-                    </button>
-                  ))}
+      {/* Sidebar with smooth animation */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 flex max-w-md mx-auto pointer-events-none transition-opacity duration-300",
+          isSidebarOpen ? "opacity-100" : "opacity-0"
+        )}
+      >
+        <div
+          className={cn(
+            "overflow-hidden bg-background border-l border-border/60 shadow-xl p-4 space-y-4 transform transition-all duration-300 pointer-events-auto",
+            isSidebarOpen ? "w-64 max-w-[75%]" : "w-0"
+          )}
+        >
+          {sidebarContent ?? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">Welcome back,</p>
+                  <h1 className="text-lg font-bold text-foreground leading-tight">John Doe</h1>
                 </div>
               </div>
-            )}
-          </div>
-          <button
-            type="button"
-            className="flex-1 bg-black/30"
-            onClick={handleCloseSidebar}
-          />
+
+              <div className="space-y-2">
+                {[
+                  { icon: UsersIcon, label: "Partners", href: "/vendors-partners" },
+                  { icon: User, label: "Profile", href: "/profile" },
+                  { icon: CreditCard, label: "Subscription", href: "/subscription" },
+                  { icon: Settings, label: "Settings", href: "/settings" },
+                  { icon: LogOut, label: "Logout", onClick: () => { logout(); window.location.href = "/login"; } },
+                ].map((action, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      handleCloseSidebar();
+                      if (action.href) {
+                        window.location.href = action.href;
+                      } else if (action.onClick) {
+                        action.onClick();
+                      }
+                    }}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/40 text-sm"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-primary">
+                      <action.icon className="h-4 w-4" />
+                    </div>
+                    <span className="flex-1 text-left font-medium text-foreground">{action.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+        <button
+          type="button"
+          className={cn(
+            "flex-1 bg-black/30 transition-opacity duration-300 pointer-events-auto",
+            isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          )}
+          onClick={handleCloseSidebar}
+        />
+      </div>
 
       {/* FAB - Conditional */}
       {/* {fabAction && (

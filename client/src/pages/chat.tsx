@@ -3,8 +3,9 @@ import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, MessageCircle, Users } from "lucide-react";
+import { Search, MessageCircle, Users, Menu } from "lucide-react";
 import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
 
 const projects = [
     { id: 1, name: "City Center Mall" },
@@ -15,17 +16,32 @@ const projects = [
 export default function Chat() {
     const [, navigate] = useLocation();
     const [search, setSearch] = useState("");
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const filteredProjects = projects.filter((p) =>
         p.name.toLowerCase().includes(search.toLowerCase())
     );
 
+    const close = () => setSidebarOpen(false);
+    const open = () => setSidebarOpen(true);
+
+
     return (
-        <MobileLayout title="Chat">
+        <MobileLayout title="Chat" sidebarOpen={sidebarOpen} onCloseSidebar={close}>
             <div className="pt-6 px-5 pb-3 sticky top-0 bg-background z-20 border-b border-border/40">
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-2xl font-bold">Chat</h1>
+                        <div className="flex items-center gap-3">
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                className="rounded-full"
+                                onClick={open}
+                            >
+                                <Menu className="h-5 w-5" />
+                            </Button>
+                            <h1 className="text-2xl font-bold">Chat</h1>
+                        </div>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Users className="h-3.5 w-3.5" />
                             <span>Project groups</span>

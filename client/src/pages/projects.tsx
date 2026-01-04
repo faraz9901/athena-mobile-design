@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Search, Filter, MoreVertical, Calendar, ArrowRight } from "lucide-react";
+import { Search, Filter, MoreVertical, Calendar, ArrowRight, Menu } from "lucide-react";
 import { Link } from "wouter";
 
 const projects = [
@@ -56,14 +56,25 @@ const projects = [
 ];
 
 export default function ProjectList() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
   return (
-    <MobileLayout title="Projects" fabAction={() => { }}>
+    <MobileLayout title="Projects" sidebarOpen={sidebarOpen} onCloseSidebar={toggleSidebar}>
       <div className="sticky top-0 bg-background z-20 pt-6 pb-2 px-5 space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="rounded-full"
+            onClick={toggleSidebar}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
           <h1 className="text-2xl font-bold">Projects</h1>
-          {/* <Button variant="outline" size="sm" className="h-8 rounded-full">
-            <Filter className="mr-2 h-3.5 w-3.5" /> Filter
-          </Button> */}
         </div>
 
         <div className="relative">

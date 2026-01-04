@@ -64,7 +64,7 @@ export default function ReportsPage() {
     };
 
     return (
-        <MobileLayout showBottomNav={true} showSidebarToggle={false}>
+        <MobileLayout showBottomNav={true}>
             {/* Header */}
             <div className="bg-primary text-primary-foreground pt-8 pb-6 px-5 rounded-b-[2rem] shadow-lg relative z-10 mb-6">
                 <div className="flex items-center gap-3">

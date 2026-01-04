@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, MoreHorizontal, Calendar, AlertCircle } from "lucide-react";
+import { Plus, MoreHorizontal, Calendar, AlertCircle, Menu } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,16 +61,30 @@ export default function Tasks() {
   const projectNames = Array.from(new Set(tasks.map((t) => t.project)));
   const [selectedProject, setSelectedProject] = useState<string>(projectNames[0] ?? "");
   const [, navigate] = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const close = () => setSidebarOpen(false);
+  const open = () => setSidebarOpen(true);
 
   return (
     <MobileLayout
       title="Tasks"
-      fabAction={() => navigate("/add-task")}
-      fabIcon={<Plus className="h-6 w-6" />}
+      sidebarOpen={sidebarOpen}
+      onCloseSidebar={close}
     >
       <div className="sticky top-0 bg-background z-20 pt-6 pb-3 px-5 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Task Board</h1>
+          <div className="flex items-center gap-3">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="rounded-full"
+              onClick={open}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-bold">Tasks</h1>
+          </div>
           <div className="flex -space-x-2">
             {[1, 2, 3].map((i) => (
               <Avatar key={i} className="h-8 w-8 border-2 border-background">
