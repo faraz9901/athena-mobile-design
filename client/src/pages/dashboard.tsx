@@ -103,7 +103,13 @@ export default function Dashboard() {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold">Recent Activity</h2>
-            <Button variant="link" className="text-primary h-auto p-0 text-sm">View All</Button>
+            <Button
+              variant="link"
+              className="text-primary h-auto p-0 text-sm"
+              onClick={() => navigate("/recent-activity")}
+            >
+              View All
+            </Button>
           </div>
 
           <div className="space-y-0">

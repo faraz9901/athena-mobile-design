@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
+import RecentActivity from "@/pages/recent-activity";
 import ProjectList from "@/pages/projects";
 import ProjectDetail from "@/pages/project-detail";
 import Tasks from "@/pages/tasks";
@@ -54,6 +55,7 @@ function Router() {
       <ProtectedRoute path="/add-expense" component={AddExpense} />
       <ProtectedRoute path="/documents" component={Documents} />
       <ProtectedRoute path="/notifications" component={Notifications} />
+      <ProtectedRoute path="/recent-activity" component={RecentActivity} />
       <ProtectedRoute path="/vendors-partners" component={VendorsPartners} />
       <ProtectedRoute path="/partner/:id" component={PartnerEdit} />
       <ProtectedRoute path="/add-partner" component={AddPartner} />
