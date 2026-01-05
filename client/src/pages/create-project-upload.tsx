@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Upload, 
-  FileText, 
-  X, 
+import {
+  Upload,
+  FileText,
+  X,
   CheckCircle2,
   Info,
   ArrowRight
@@ -30,6 +30,7 @@ const documentCategories = [
 export default function CreateProjectUpload() {
   const [, setLocation] = useLocation();
   const [projectName, setProjectName] = useState("");
+  const [hasDocumentsChoice, setHasDocumentsChoice] = useState<"yes" | "no" | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [uploadedFiles, setUploadedFiles] = useState<Array<{
     id: string;
@@ -66,6 +67,58 @@ export default function CreateProjectUpload() {
     setLocation("/create-project-form");
   };
 
+  // First screen: ask if user has documents to upload
+  if (hasDocumentsChoice === null) {
+    return (
+      <MobileLayout title="Create Project">
+        <div className="px-5 py-10 h-[80vh] flex flex-col justify-center space-y-6">
+          <div className="space-y-2 text-center">
+            <h1 className="text-2xl font-bold">How do you want to start?</h1>
+            <p className="text-sm text-muted-foreground">
+              You can upload documents and let Athena auto-extract details, or skip upload and fill the project form manually.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <Card className="border border-primary/40 bg-primary/5">
+              <CardContent className="p-4 space-y-2">
+                <p className="text-sm font-semibold">Upload project documents</p>
+                <p className="text-xs text-muted-foreground">
+                  Recommended if you have tender, drawings or other key documents handy.
+                </p>
+                <Button
+                  type="button"
+                  className="mt-1 w-full h-10 rounded-xl text-sm"
+                  onClick={() => setHasDocumentsChoice("yes")}
+                >
+                  Yes, I want to upload documents
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border/60 bg-muted/40">
+              <CardContent className="p-4 space-y-2">
+                <p className="text-sm font-semibold">Enter details manually</p>
+                <p className="text-xs text-muted-foreground">
+                  Ideal if you don't have documents right now. You can still upload them later inside the project.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-1 w-full h-10 rounded-xl text-sm"
+                  onClick={handleContinue}
+                >
+                  No, take me to the form
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </MobileLayout>
+    );
+  }
+
+  // Second screen: user chose to upload documents
   return (
     <MobileLayout title="Create Project">
       <div className="px-5 py-6 space-y-6">
@@ -187,7 +240,7 @@ export default function CreateProjectUpload() {
                   Auto-Extraction Enabled
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  System will auto-extract data from documents including tender details, 
+                  System will auto-extract data from documents including tender details,
                   amounts, dates, and other project information.
                 </p>
               </div>
@@ -213,4 +266,3 @@ export default function CreateProjectUpload() {
     </MobileLayout>
   );
 }
-
