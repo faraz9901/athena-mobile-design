@@ -8,6 +8,7 @@ import Dashboard from "@/pages/dashboard";
 import RecentActivity from "@/pages/recent-activity";
 import ProjectList from "@/pages/projects";
 import ProjectDetail from "@/pages/project-detail";
+import ProjectContactsPage from "@/pages/project-contacts";
 import Tasks from "@/pages/tasks";
 import AddTask from "@/pages/add-task";
 import Expenses from "@/pages/expenses";
@@ -44,6 +45,7 @@ function Router() {
       <ProtectedRoute path="/" component={Dashboard} />
       <ProtectedRoute path="/projects" component={ProjectList} />
       <ProtectedRoute path="/project/:id" component={ProjectDetail} />
+      <ProtectedRoute path="/project/:id/contacts" component={ProjectContactsPage} />
       <ProtectedRoute path="/tasks" component={Tasks} />
       <ProtectedRoute path="/add-task" component={AddTask} />
       <ProtectedRoute path="/chat" component={Chat} />

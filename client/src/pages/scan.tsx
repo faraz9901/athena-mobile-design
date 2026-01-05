@@ -29,7 +29,7 @@ const initialScans: Record<number, { id: number; name: string; type: string; tim
     ],
 };
 
-type ViewState = "LIST" | "CAMERA" | "PROCESSING" | "REVIEW";
+type ViewState = "LIST" | "CAMERA" | "PROCESSING" | "REVIEW" | "PROJECT_SELECT";
 
 export default function ScanDocuments() {
     const [viewState, setViewState] = useState<ViewState>("LIST");
@@ -157,7 +157,18 @@ export default function ScanDocuments() {
                 extractedData={extractedData}
                 setExtractedData={setExtractedData}
                 setViewState={setViewState}
+            />
+        );
+    }
+
+    // Render Project Selection View (after review, before saving)
+    if (viewState === "PROJECT_SELECT") {
+        return (
+            <ProjectSelectView
+                selectedProjectId={selectedProjectId}
+                setSelectedProjectId={setSelectedProjectId}
                 handleSave={handleSave}
+                setViewState={setViewState}
             />
         );
     }
@@ -190,21 +201,6 @@ export default function ScanDocuments() {
                     </Button>
                 </div>
 
-                <Tabs
-                    defaultValue={String(selectedProjectId)}
-                    value={String(selectedProjectId)}
-                    onValueChange={(val) => setSelectedProjectId(Number(val))}
-                    className="w-full"
-                >
-                    <TabsList className="w-full grid grid-cols-3 bg-secondary/30 p-1">
-                        {projects.map((p) => (
-                            <TabsTrigger key={p.id} value={String(p.id)} className="text-xs">
-                                {p.name}
-                            </TabsTrigger>
-                        ))}
-                    </TabsList>
-                </Tabs>
-
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -216,57 +212,59 @@ export default function ScanDocuments() {
                 </div>
             </div>
 
-            <div className="px-5 mt-2 space-y-3 pb-24">
-                {currentScans.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-10 text-muted-foreground border-2 border-dashed border-border/50 rounded-xl">
-                        <Camera className="h-8 w-8 mb-3 opacity-30" />
-                        <p className="text-sm font-medium">No scans yet</p>
-                        <p className="text-xs text-muted-foreground mt-1 text-center max-w-[200px]">
-                            Tap "Open Camera" to start digitizing your documents.
-                        </p>
-                    </div>
-                ) : (
-                    currentScans.map((doc) => (
-                        <Card
-                            key={doc.id}
-                            className="border-none shadow-sm ring-1 ring-black/5 hover:bg-secondary/20 transition-colors cursor-pointer"
-                        >
-                            <CardContent className="p-3 flex items-center gap-3">
-                                <div
-                                    className={cn(
-                                        "h-10 w-10 rounded-lg flex items-center justify-center shrink-0 font-bold text-[11px]",
-                                        doc.type === "PDF" ? "bg-red-50 text-red-600" : "bg-blue-50 text-blue-600"
-                                    )}
-                                >
-                                    {doc.type}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <h4 className="text-sm font-semibold truncate text-foreground">{doc.name}</h4>
-                                        <span className="text-[10px] text-muted-foreground flex items-center gap-1 shrink-0">
-                                            <Clock className="h-3 w-3" /> {doc.time}
-                                        </span>
+            <div className="px-5 mt-3 space-y-3 pb-24">
+                <div className="space-y-3">
+                    {currentScans.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 text-muted-foreground border-2 border-dashed border-border/50 rounded-xl">
+                            <Camera className="h-8 w-8 mb-3 opacity-30" />
+                            <p className="text-sm font-medium">No scans yet</p>
+                            <p className="text-xs text-muted-foreground mt-1 text-center max-w-[200px]">
+                                Tap "Open Camera" to start digitizing your documents.
+                            </p>
+                        </div>
+                    ) : (
+                        currentScans.map((doc) => (
+                            <Card
+                                key={doc.id}
+                                className="border-none shadow-sm ring-1 ring-black/5 hover:bg-secondary/20 transition-colors cursor-pointer"
+                            >
+                                <CardContent className="p-3 flex items-center gap-3">
+                                    <div
+                                        className={cn(
+                                            "h-10 w-10 rounded-lg flex items-center justify-center shrink-0 font-bold text-[11px]",
+                                            doc.type === "PDF" ? "bg-red-50 text-red-600" : "bg-blue-50 text-blue-600"
+                                        )}
+                                    >
+                                        {doc.type}
                                     </div>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <Badge
-                                            variant="outline"
-                                            className="text-[10px] h-5 px-1.5 font-normal border-border bg-background"
-                                        >
-                                            {doc.category}
-                                        </Badge>
-                                        <span className="text-[10px] text-muted-foreground truncate">{doc.project}</span>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <h4 className="text-sm font-semibold truncate text-foreground">{doc.name}</h4>
+                                            <span className="text-[10px] text-muted-foreground flex items-center gap-1 shrink-0">
+                                                <Clock className="h-3 w-3" /> {doc.time}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <Badge
+                                                variant="outline"
+                                                className="text-[10px] h-5 px-1.5 font-normal border-border bg-background"
+                                            >
+                                                {doc.category}
+                                            </Badge>
+                                            <span className="text-[10px] text-muted-foreground truncate">{doc.project}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                )}
+                                </CardContent>
+                            </Card>
+                        ))
+                    )}
+                </div>
             </div>
         </MobileLayout>
     );
 }
 
-function ReviewView({ extractedData, setExtractedData, setViewState, handleSave }: any) {
+function ReviewView({ extractedData, setExtractedData, setViewState }: any) {
     return (
         <MobileLayout title="Review Scan" >
             <div className="p-5 space-y-6">
@@ -365,11 +363,71 @@ function ReviewView({ extractedData, setExtractedData, setViewState, handleSave 
 
                     <div className="pt-4 flex gap-3">
                         <Button variant="outline" className="flex-1" onClick={() => setViewState("LIST")}>Cancel</Button>
-                        <Button className="flex-1" onClick={handleSave}>
+                        <Button className="flex-1" onClick={() => setViewState("PROJECT_SELECT")}>
                             <Check className="w-4 h-4 mr-2" />
-                            Save
+                            Next
                         </Button>
                     </div>
+                </div>
+            </div>
+        </MobileLayout>
+    );
+}
+
+function ProjectSelectView({ selectedProjectId, setSelectedProjectId, handleSave, setViewState }: any) {
+    return (
+        <MobileLayout title="Select Project" >
+            <div className="p-5 space-y-5 pb-24 h-[60vh] flex flex-col justify-center  ">
+                <div className="space-y-1">
+                    <h2 className="text-lg font-bold">Choose project for this document</h2>
+                    <p className="text-xs text-muted-foreground">
+                        This scan will be created under the project you select below.
+                    </p>
+                </div>
+
+                <div className="rounded-2xl border border-primary/50 bg-primary/5 px-4 py-3 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                        <div>
+                            <p className="text-[11px] font-semibold text-primary uppercase tracking-wide">
+                                Project
+                            </p>
+                            <p className="text-[11px] text-muted-foreground">
+                                Required before saving this document
+                            </p>
+                        </div>
+                        <Badge className="text-[10px] px-2 py-0.5 bg-primary text-primary-foreground">
+                            Required
+                        </Badge>
+                    </div>
+
+                    <Tabs
+                        defaultValue={String(selectedProjectId)}
+                        value={String(selectedProjectId)}
+                        onValueChange={(val) => setSelectedProjectId(Number(val))}
+                        className="w-full mt-2"
+                    >
+                        <TabsList className="w-full grid grid-cols-3 bg-background/60 p-1 rounded-xl">
+                            {projects.map((p) => (
+                                <TabsTrigger
+                                    key={p.id}
+                                    value={String(p.id)}
+                                    className="text-[11px] px-2 py-1 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                                >
+                                    {p.name}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                    </Tabs>
+                </div>
+
+                <div className="pt-2 flex gap-3">
+                    <Button variant="outline" className="flex-1" onClick={() => setViewState("REVIEW")}>
+                        Back
+                    </Button>
+                    <Button className="flex-1" onClick={handleSave}>
+                        <Check className="w-4 h-4 mr-2" />
+                        Save
+                    </Button>
                 </div>
             </div>
         </MobileLayout>

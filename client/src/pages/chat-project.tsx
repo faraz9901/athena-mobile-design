@@ -4,7 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Users, Send } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, Users, Send, Flag, Calendar, ClipboardList } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
 
 const projects = [
@@ -87,6 +90,12 @@ export default function ChatProject() {
         initialMessagesByProject
     );
     const [newMessage, setNewMessage] = useState("");
+    const [showTaskComposer, setShowTaskComposer] = useState(false);
+    const [taskTitle, setTaskTitle] = useState("");
+    const [taskPriority, setTaskPriority] = useState("Medium");
+    const [taskDueDate, setTaskDueDate] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [assignedTo, setAssignedTo] = useState("John Doe");
 
     const activeMessages = project ? messagesByProject[project.id] || [] : [];
 
@@ -111,6 +120,48 @@ export default function ChatProject() {
             };
         });
         setNewMessage("");
+    };
+
+    const resetTaskForm = () => {
+        setTaskTitle("");
+        setTaskPriority("Medium");
+        setTaskDueDate("");
+        setTaskDescription("");
+    };
+
+    const handleMockCreateTask = () => {
+        if (!project || !taskTitle.trim()) return;
+
+        // Mock behaviour: append a system-style message describing the created task
+        setMessagesByProject((prev) => {
+            const existing = prev[project.id] || [];
+            const nextId = existing.length ? existing[existing.length - 1].id + 1 : 1;
+            const summaryLines = [
+                `New task from chat: ${taskTitle.trim()}`,
+                taskPriority ? `Priority: ${taskPriority}` : undefined,
+                taskDueDate ? `Due: ${taskDueDate}` : undefined,
+                assignedTo ? `Assigned to: ${assignedTo}` : undefined,
+                taskDescription ? `Description: ${taskDescription}` : undefined,
+            ].filter(Boolean);
+
+            const updated: ChatMessage[] = [
+                ...existing,
+                {
+                    id: nextId,
+                    text: summaryLines.join("\n"),
+                    time: "Now",
+                    fromMe: true,
+                    sender: "You",
+                },
+            ];
+            return {
+                ...prev,
+                [project.id]: updated,
+            };
+        });
+
+        resetTaskForm();
+        setShowTaskComposer(false);
     };
 
     return (
@@ -146,9 +197,122 @@ export default function ChatProject() {
                 </div>
             </div>
 
-            <div className="px-5 pt-3 pb-24 space-y-2">
+            <div className="px-5 pt-3 pb-24 space-y-3">
                 <div className="flex flex-col gap-2 text-[11px] text-muted-foreground items-center mb-2">
                     <span>Messages are visible to all members of this project group.</span>
+                </div>
+
+                {/* Inline task creation from chat */}
+                <div className="space-y-2">
+                    {!showTaskComposer ? (
+                        null
+                    ) : (
+                        <Card className="border border-primary/40 bg-primary/5 rounded-2xl">
+                            <CardContent className="p-3 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <ClipboardList className="h-4 w-4 text-primary" />
+                                        <p className="text-xs font-semibold">New task for {project.name}</p>
+                                    </div>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-7 px-2 text-[11px]"
+                                        onClick={() => {
+                                            setShowTaskComposer(false);
+                                            resetTaskForm();
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <div className="space-y-1">
+                                        <Label className="text-[11px]">Task title</Label>
+                                        <Input
+                                            value={taskTitle}
+                                            onChange={(e) => setTaskTitle(e.target.value)}
+                                            placeholder="e.g. Share progress report in client format"
+                                            className="h-9 rounded-xl text-xs"
+                                        />
+                                    </div>
+
+                                    <div className="flex gap-2">
+                                        <div className="flex-1 space-y-1">
+                                            <Label className="text-[11px] flex items-center gap-1">
+                                                <Flag className="h-3 w-3" />
+                                                Priority
+                                            </Label>
+                                            <Select value={taskPriority} onValueChange={setTaskPriority}>
+                                                <SelectTrigger className="h-9 rounded-xl text-xs">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="High">High</SelectItem>
+                                                    <SelectItem value="Medium">Medium</SelectItem>
+                                                    <SelectItem value="Low">Low</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+
+                                        <div className="flex-1 space-y-1">
+                                            <Label className="text-[11px] flex items-center gap-1">
+                                                <Calendar className="h-3 w-3" />
+                                                Due date
+                                            </Label>
+                                            <Input
+                                                type="text"
+                                                placeholder="YYYY-MM-DD"
+                                                value={taskDueDate}
+                                                onChange={(e) => setTaskDueDate(e.target.value)}
+                                                className="h-9 rounded-xl text-xs"
+                                                inputMode="numeric"
+                                                pattern="\d{4}-\d{2}-\d{2}"
+                                                maxLength={10}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-[11px]">Details</Label>
+                                        <Textarea
+                                            value={taskDescription}
+                                            onChange={(e) => setTaskDescription(e.target.value)}
+                                            placeholder="Add quick context or decisions from this chat"
+                                            className="min-h-[60px] rounded-xl text-xs resize-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-[11px] flex items-center gap-1">
+                                            <Users className="h-3 w-3" />
+                                            Assign To
+                                        </Label>
+                                        <Select value={assignedTo} onValueChange={setAssignedTo}>
+                                            <SelectTrigger className="h-9 rounded-xl text-xs">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="John Doe">John Doe</SelectItem>
+                                                <SelectItem value="Jane Doe">Jane Doe</SelectItem>
+                                                <SelectItem value="Mark Doe">Mark Doe</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    className="w-full h-9 rounded-xl text-xs mt-1"
+                                    disabled={!taskTitle.trim()}
+                                    onClick={handleMockCreateTask}
+                                >
+                                    Save  task
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
                 <div className="space-y-4">
                     {activeMessages.map((msg) => (
@@ -197,10 +361,15 @@ export default function ChatProject() {
                             }
                         }}
                     />
-                    <Button size="icon" className="h-9 w-9 rounded-xl" onClick={handleSendMessage}>
+                    <Button size="icon" variant={"ghost"} className="h-9 aspect-square rounded-xl" onClick={() => setShowTaskComposer(!showTaskComposer)}>
+                        <ClipboardList className="h-6 w-6" />
+                    </Button>
+
+                    <Button size="icon" className="h-9 aspect-square rounded-xl" onClick={handleSendMessage}>
                         <Send className="h-4 w-4" />
                     </Button>
                 </div>
+
             </div>
         </MobileLayout>
     );

@@ -367,8 +367,9 @@ export default function ProjectDetail() {
           </TabsContent>
 
           <TabsContent value="others" className="space-y-4">
-            <Others />
+            <Others projectId={projectId} />
           </TabsContent>
+
         </Tabs>
       </div>
 

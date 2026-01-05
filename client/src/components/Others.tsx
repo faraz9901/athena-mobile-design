@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
     Accordion,
     AccordionContent,
@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/accordion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Edit, Mail, MoreVertical, Phone, Trash2, Users } from "lucide-react";
+import { Edit, Mail, MoreVertical, Phone, Trash2, Users, Plus, PhoneCall } from "lucide-react";
 import { Badge } from "./ui/badge";
 import {
     DropdownMenu,
@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 
-import { useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
+import { getContactsByProject } from "@/lib/contacts-store";
 
 
 // Local mock partners for this project detail page
@@ -48,8 +49,22 @@ const projectPartners = [
     },
 ];
 
-function Others() {
-    const [_, navigate] = useLocation()
+type OthersProps = {
+    projectId?: string | null;
+};
+
+function Others({ projectId }: OthersProps) {
+    const [_, navigate] = useLocation();
+
+    // Fallback: try to read project id from route if not passed explicitly
+    const [matchRoute, routeParams] = useRoute("/project/:id");
+    const effectiveProjectId = projectId || (matchRoute ? routeParams?.id : undefined) || "";
+
+    const contacts = useMemo(() => {
+        if (!effectiveProjectId) return [];
+        return getContactsByProject(effectiveProjectId);
+    }, [effectiveProjectId]);
+
     return (
         <Accordion
             type="multiple"
@@ -159,6 +174,95 @@ function Others() {
                             </div>
                         ))}
                     </div>
+                </AccordionContent>
+            </AccordionItem>
+
+            {/* Contacts per project */}
+            <AccordionItem value="contacts">
+                <AccordionTrigger className="px-4 py-3 text-sm font-semibold">
+                    Project Contacts
+                </AccordionTrigger>
+
+                <AccordionContent className="pb-4">
+                    <div className="flex items-center justify-between px-3 mb-2">
+                        <p className="text-xs text-muted-foreground">
+                            Important contacts linked to this project
+                        </p>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 px-2 text-[11px]"
+                            onClick={() => effectiveProjectId && navigate(`/project/${effectiveProjectId}/contacts`)}
+                            disabled={!effectiveProjectId}
+                        >
+                            <Plus className="h-3 w-3 mr-1" />
+                            Manage
+                        </Button>
+                    </div>
+
+                    {(!contacts || contacts.length === 0) ? (
+                        <div className="mx-3 mt-1 text-[11px] text-muted-foreground border border-dashed rounded-lg px-3 py-4 flex items-center gap-2">
+                            <PhoneCall className="h-3.5 w-3.5" />
+                            <span>No contacts added yet. Use "Manage" to add key people for this project.</span>
+                        </div>
+                    ) : (
+                        <div className="space-y-3 px-3">
+                            {contacts.map((c) => (
+                                <div
+                                    key={c.id}
+                                    className="flex items-start justify-between gap-3 rounded-xl border border-border/60 px-3 py-3"
+                                >
+                                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                                        <Avatar className="h-8 w-8 border border-primary/20">
+                                            <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                                                {c.name
+                                                    .split(" ")
+                                                    .map((n) => n[0])
+                                                    .join("")
+                                                    .slice(0, 2)}
+                                            </AvatarFallback>
+                                        </Avatar>
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <p className="font-semibold text-sm truncate">
+                                                    {c.name}
+                                                </p>
+                                                <Badge className="text-[10px] px-2 py-0.5 flex items-center gap-1">
+                                                    <PhoneCall className="h-3 w-3" />
+                                                    Contact
+                                                </Badge>
+                                            </div>
+
+                                            {c.description && (
+                                                <p className="text-[11px] text-muted-foreground mb-1 truncate">
+                                                    {c.description}
+                                                </p>
+                                            )}
+
+                                            {c.phone && (
+                                                <div className="space-y-1 text-[11px] text-muted-foreground">
+                                                    <div className="flex items-center gap-2">
+                                                        <Phone className="h-3 w-3" />
+                                                        <span>{c.phone}</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-7 w-7 shrink-0"
+                                        onClick={() => effectiveProjectId && navigate(`/project/${effectiveProjectId}/contacts`)}
+                                    >
+                                        <Edit className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </AccordionContent>
             </AccordionItem>
 
