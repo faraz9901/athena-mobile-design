@@ -30,7 +30,7 @@ const documentCategories = [
 export default function CreateProjectUpload() {
   const [, setLocation] = useLocation();
   const [projectName, setProjectName] = useState("");
-  const [hasDocumentsChoice, setHasDocumentsChoice] = useState<"yes" | "no" | null>(null);
+  const [step, setStep] = useState<0 | 1 | 2>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [uploadedFiles, setUploadedFiles] = useState<Array<{
     id: string;
@@ -67,8 +67,46 @@ export default function CreateProjectUpload() {
     setLocation("/create-project-form");
   };
 
-  // First screen: ask if user has documents to upload
-  if (hasDocumentsChoice === null) {
+  // Step 0: Ask only for project name
+  if (step === 0) {
+    return (
+      <MobileLayout title="Create Project">
+        <div className="px-5 py-10 h-[80vh] flex flex-col justify-center space-y-8">
+          <div className="space-y-2 text-center">
+            <h1 className="text-2xl font-bold">Name your project</h1>
+            <p className="text-sm text-muted-foreground">
+              Start by giving this project a clear name. You can add more details in the next steps.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="projectName">Project Name</Label>
+              <Input
+                id="projectName"
+                placeholder="e.g. City Center Mall Renovation"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className="h-11 rounded-xl"
+              />
+            </div>
+
+            <Button
+              type="button"
+              className="w-full h-11 rounded-xl text-sm"
+              disabled={!projectName.trim()}
+              onClick={() => setStep(1)}
+            >
+              Continue
+            </Button>
+          </div>
+        </div>
+      </MobileLayout>
+    );
+  }
+
+  // Step 1: Ask how the user wants to start (upload vs manual)
+  if (step === 1) {
     return (
       <MobileLayout title="Create Project">
         <div className="px-5 py-10 h-[80vh] flex flex-col justify-center space-y-6">
@@ -89,7 +127,7 @@ export default function CreateProjectUpload() {
                 <Button
                   type="button"
                   className="mt-1 w-full h-10 rounded-xl text-sm"
-                  onClick={() => setHasDocumentsChoice("yes")}
+                  onClick={() => setStep(2)}
                 >
                   Yes, I want to upload documents
                 </Button>
@@ -118,7 +156,7 @@ export default function CreateProjectUpload() {
     );
   }
 
-  // Second screen: user chose to upload documents
+  // Step 2: user chose to upload documents
   return (
     <MobileLayout title="Create Project">
       <div className="px-5 py-6 space-y-6">
@@ -128,18 +166,6 @@ export default function CreateProjectUpload() {
           <p className="text-sm text-muted-foreground">
             Upload project documents to auto-extract information
           </p>
-        </div>
-
-        {/* Project Name Field */}
-        <div className="space-y-2">
-          <Label htmlFor="projectName">Project Name</Label>
-          <Input
-            id="projectName"
-            placeholder="Enter project name"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            className="h-11 rounded-xl"
-          />
         </div>
 
         {/* Document Category Selector */}

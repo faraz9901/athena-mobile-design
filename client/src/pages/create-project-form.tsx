@@ -65,6 +65,8 @@ export default function CreateProjectForm() {
     taxes: mockExtractedData.applicableTaxes
   });
 
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(0);
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -90,11 +92,19 @@ export default function CreateProjectForm() {
   };
 
   const handleContinue = () => {
-    setLocation("/create-project-share");
+    if (step < 4) {
+      setStep((prev) => (prev + 1) as typeof step);
+    } else {
+      setLocation("/create-project-share");
+    }
   };
 
   const handleBack = () => {
-    setLocation("/create-project-upload");
+    if (step > 0) {
+      setStep((prev) => (prev - 1) as typeof step);
+    } else {
+      setLocation("/create-project-upload");
+    }
   };
 
   return (
@@ -118,332 +128,338 @@ export default function CreateProjectForm() {
           </p>
         </div>
 
-        {/* Basic Information Section */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Basic Information
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="nameOfWork">Name of Work</Label>
-                <div className="relative">
-                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="nameOfWork"
-                    value={formData.nameOfWork}
-                    onChange={(e) => handleInputChange("nameOfWork", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.nameOfWork]}
-                    suggestionsLabel="Extracted project titles"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="locationOfWork">Location of Work</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Textarea
-                    id="locationOfWork"
-                    value={formData.locationOfWork}
-                    onChange={(e) => handleInputChange("locationOfWork", e.target.value)}
-                    className="pl-9 rounded-xl min-h-[80px]"
-                    placeholder="Enter full address"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="typeOfWork">Type of Work</Label>
-                <SmartInput
-                  id="typeOfWork"
-                  value={formData.typeOfWork}
-                  onChange={(e) => handleInputChange("typeOfWork", e.target.value)}
-                  className="h-11 rounded-xl"
-                  placeholder="e.g., Commercial Construction"
-                  suggestions={[mockExtractedData.typeOfWork]}
-                  suggestionsLabel="Extracted type of work"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="tenderId">Tender ID</Label>
-                <div className="relative">
-                  <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="tenderId"
-                    value={formData.tenderId}
-                    onChange={(e) => handleInputChange("tenderId", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.tenderId]}
-                    suggestionsLabel="Extracted tender IDs"
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Tendering Authority Section */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Tendering Authority
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="tenderingAuthorityName">Authority Name</Label>
-                <SmartInput
-                  id="tenderingAuthorityName"
-                  value={formData.tenderingAuthorityName}
-                  onChange={(e) => handleInputChange("tenderingAuthorityName", e.target.value)}
-                  className="h-11 rounded-xl"
-                  suggestions={[mockExtractedData.tenderingAuthorityName]}
-                  suggestionsLabel="Extracted authority names"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="tenderingAuthorityAddress">Authority Address</Label>
-                <Textarea
-                  id="tenderingAuthorityAddress"
-                  value={formData.tenderingAuthorityAddress}
-                  onChange={(e) => handleInputChange("tenderingAuthorityAddress", e.target.value)}
-                  className="rounded-xl min-h-[80px]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="departmentName">Department Name</Label>
-                <SmartInput
-                  id="departmentName"
-                  value={formData.departmentName}
-                  onChange={(e) => handleInputChange("departmentName", e.target.value)}
-                  className="h-11 rounded-xl"
-                  suggestions={[mockExtractedData.departmentName]}
-                  suggestionsLabel="Extracted department name"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Financial Information Section */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Financial Information
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="totalWorkAmount">Total Work Amount (₹)</Label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="totalWorkAmount"
-                    type="number"
-                    value={formData.totalWorkAmount}
-                    onChange={(e) => handleInputChange("totalWorkAmount", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    placeholder="0.00"
-                    suggestions={[mockExtractedData.totalWorkAmount]}
-                    suggestionsLabel="Extracted total amount"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="tentativeAmount">Tentative Amount (₹) - Manual</Label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="tentativeAmount"
-                    type="number"
-                    value={formData.tentativeAmount}
-                    onChange={(e) => handleInputChange("tentativeAmount", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    placeholder="0.00"
-                    suggestions={[mockExtractedData.tentativeAmount]}
-                    suggestionsLabel="Extracted tentative amount"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="emdAmount">EMD Amount (₹)</Label>
-                <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="emdAmount"
-                    type="number"
-                    value={formData.emdAmount}
-                    onChange={(e) => handleInputChange("emdAmount", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    placeholder="0.00"
-                    suggestions={[mockExtractedData.emdAmount]}
-                    suggestionsLabel="Extracted EMD amount"
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Dates & Duration Section */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-              Dates & Duration
-            </h3>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="bidSubmissionDate">Bid Submission Date</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="bidSubmissionDate"
-                    type="date"
-                    value={formData.bidSubmissionDate}
-                    onChange={(e) => handleInputChange("bidSubmissionDate", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.bidSubmissionDate]}
-                    suggestionsLabel="Extracted bid submission date"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="emdRefundDate">EMD Refund Date</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="emdRefundDate"
-                    type="date"
-                    value={formData.emdRefundDate}
-                    onChange={(e) => handleInputChange("emdRefundDate", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.emdRefundDate]}
-                    suggestionsLabel="Extracted EMD refund date"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="startDate"
-                    type="date"
-                    value={formData.startDate}
-                    onChange={(e) => handleInputChange("startDate", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.startDate]}
-                    suggestionsLabel="Extracted start date"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="endDate">End Date</Label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <SmartInput
-                    id="endDate"
-                    type="date"
-                    value={formData.endDate}
-                    onChange={(e) => handleInputChange("endDate", e.target.value)}
-                    className="pl-9 h-11 rounded-xl"
-                    suggestions={[mockExtractedData.endDate]}
-                    suggestionsLabel="Extracted end date"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="workDuration">Work Duration (Months)</Label>
-                <SmartInput
-                  id="workDuration"
-                  type="number"
-                  value={formData.workDuration}
-                  onChange={(e) => handleInputChange("workDuration", e.target.value)}
-                  className="h-11 rounded-xl"
-                  placeholder="0"
-                  suggestions={[mockExtractedData.workDuration]}
-                  suggestionsLabel="Extracted duration"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Applicable Taxes Section */}
-        <Card className="border-none shadow-sm">
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between">
+        {/* Step content */}
+        {step === 0 && (
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-4 space-y-4">
               <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
-                Applicable Taxes
+                Basic Information
               </h3>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addTax}
-                className="h-8 text-xs"
-              >
-                + Add Tax
-              </Button>
-            </div>
 
-            <div className="space-y-3">
-              {formData.taxes.map((tax, index) => (
-                <div key={index} className="flex gap-2">
-                  <div className="flex-1 space-y-2">
-                    <Label>Tax Name</Label>
-                    <Input
-                      value={tax.name}
-                      onChange={(e) => handleTaxChange(index, "name", e.target.value)}
-                      className="h-10 rounded-xl"
-                      placeholder="e.g., GST"
-                      disabled={tax.disabled}
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="nameOfWork">Name of Work</Label>
+                  <div className="relative">
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="nameOfWork"
+                      value={formData.nameOfWork}
+                      onChange={(e) => handleInputChange("nameOfWork", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.nameOfWork]}
+                      suggestionsLabel="Extracted project titles"
                     />
                   </div>
-                  <div className="w-24 space-y-2">
-                    <Label>%</Label>
-                    <div className="relative">
-                      <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="locationOfWork">Location of Work</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Textarea
+                      id="locationOfWork"
+                      value={formData.locationOfWork}
+                      onChange={(e) => handleInputChange("locationOfWork", e.target.value)}
+                      className="pl-9 rounded-xl min-h-[80px]"
+                      placeholder="Enter full address"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="typeOfWork">Type of Work</Label>
+                  <SmartInput
+                    id="typeOfWork"
+                    value={formData.typeOfWork}
+                    onChange={(e) => handleInputChange("typeOfWork", e.target.value)}
+                    className="h-11 rounded-xl"
+                    placeholder="e.g., Commercial Construction"
+                    suggestions={[mockExtractedData.typeOfWork]}
+                    suggestionsLabel="Extracted type of work"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tenderId">Tender ID</Label>
+                  <div className="relative">
+                    <FileText className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="tenderId"
+                      value={formData.tenderId}
+                      onChange={(e) => handleInputChange("tenderId", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.tenderId]}
+                      suggestionsLabel="Extracted tender IDs"
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {step === 1 && (
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-4 space-y-4">
+              <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                Tendering Authority
+              </h3>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="tenderingAuthorityName">Authority Name</Label>
+                  <SmartInput
+                    id="tenderingAuthorityName"
+                    value={formData.tenderingAuthorityName}
+                    onChange={(e) => handleInputChange("tenderingAuthorityName", e.target.value)}
+                    className="h-11 rounded-xl"
+                    suggestions={[mockExtractedData.tenderingAuthorityName]}
+                    suggestionsLabel="Extracted authority names"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tenderingAuthorityAddress">Authority Address</Label>
+                  <Textarea
+                    id="tenderingAuthorityAddress"
+                    value={formData.tenderingAuthorityAddress}
+                    onChange={(e) => handleInputChange("tenderingAuthorityAddress", e.target.value)}
+                    className="rounded-xl min-h-[80px]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="departmentName">Department Name</Label>
+                  <SmartInput
+                    id="departmentName"
+                    value={formData.departmentName}
+                    onChange={(e) => handleInputChange("departmentName", e.target.value)}
+                    className="h-11 rounded-xl"
+                    suggestions={[mockExtractedData.departmentName]}
+                    suggestionsLabel="Extracted department name"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {step === 2 && (
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-4 space-y-4">
+              <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                Financial Information
+              </h3>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="totalWorkAmount">Total Work Amount (₹)</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="totalWorkAmount"
+                      type="number"
+                      value={formData.totalWorkAmount}
+                      onChange={(e) => handleInputChange("totalWorkAmount", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      placeholder="0.00"
+                      suggestions={[mockExtractedData.totalWorkAmount]}
+                      suggestionsLabel="Extracted total amount"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tentativeAmount">Tentative Amount (₹) - Manual</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="tentativeAmount"
+                      type="number"
+                      value={formData.tentativeAmount}
+                      onChange={(e) => handleInputChange("tentativeAmount", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      placeholder="0.00"
+                      suggestions={[mockExtractedData.tentativeAmount]}
+                      suggestionsLabel="Extracted tentative amount"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emdAmount">EMD Amount (₹)</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="emdAmount"
+                      type="number"
+                      value={formData.emdAmount}
+                      onChange={(e) => handleInputChange("emdAmount", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      placeholder="0.00"
+                      suggestions={[mockExtractedData.emdAmount]}
+                      suggestionsLabel="Extracted EMD amount"
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {step === 3 && (
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-4 space-y-4">
+              <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                Dates & Duration
+              </h3>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="bidSubmissionDate">Bid Submission Date</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="bidSubmissionDate"
+                      type="date"
+                      value={formData.bidSubmissionDate}
+                      onChange={(e) => handleInputChange("bidSubmissionDate", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.bidSubmissionDate]}
+                      suggestionsLabel="Extracted bid submission date"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="emdRefundDate">EMD Refund Date</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="emdRefundDate"
+                      type="date"
+                      value={formData.emdRefundDate}
+                      onChange={(e) => handleInputChange("emdRefundDate", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.emdRefundDate]}
+                      suggestionsLabel="Extracted EMD refund date"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="startDate">Start Date</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="startDate"
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => handleInputChange("startDate", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.startDate]}
+                      suggestionsLabel="Extracted start date"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="endDate">End Date</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <SmartInput
+                      id="endDate"
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => handleInputChange("endDate", e.target.value)}
+                      className="pl-9 h-11 rounded-xl"
+                      suggestions={[mockExtractedData.endDate]}
+                      suggestionsLabel="Extracted end date"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="workDuration">Work Duration (Months)</Label>
+                  <SmartInput
+                    id="workDuration"
+                    type="number"
+                    value={formData.workDuration}
+                    onChange={(e) => handleInputChange("workDuration", e.target.value)}
+                    className="h-11 rounded-xl"
+                    placeholder="0"
+                    suggestions={[mockExtractedData.workDuration]}
+                    suggestionsLabel="Extracted duration"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {step === 4 && (
+          <Card className="border-none shadow-sm">
+            <CardContent className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                  Applicable Taxes
+                </h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addTax}
+                  className="h-8 text-xs"
+                >
+                  + Add Tax
+                </Button>
+              </div>
+
+              <div className="space-y-3">
+                {formData.taxes.map((tax, index) => (
+                  <div key={index} className="flex gap-2">
+                    <div className="flex-1 space-y-2">
+                      <Label>Tax Name</Label>
                       <Input
-                        type="number"
-                        value={tax.percentage}
-                        onChange={(e) => handleTaxChange(index, "percentage", e.target.value)}
-                        className="h-10 rounded-xl pr-9"
-                        placeholder="0"
+                        value={tax.name}
+                        onChange={(e) => handleTaxChange(index, "name", e.target.value)}
+                        className="h-10 rounded-xl"
+                        placeholder="e.g., GST"
                         disabled={tax.disabled}
                       />
                     </div>
+                    <div className="w-24 space-y-2">
+                      <Label>%</Label>
+                      <div className="relative">
+                        <Percent className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="number"
+                          value={tax.percentage}
+                          onChange={(e) => handleTaxChange(index, "percentage", e.target.value)}
+                          className="h-10 rounded-xl pr-9"
+                          placeholder="0"
+                          disabled={tax.disabled}
+                        />
+                      </div>
+                    </div>
+                    {formData.taxes.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        disabled={tax.disabled}
+                        onClick={() => removeTax(index)}
+                        className="h-10 w-10 mt-6"
+                      >
+                        <span className="text-lg">×</span>
+                      </Button>
+                    )}
                   </div>
-                  {formData.taxes.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      disabled={tax.disabled}
-                      onClick={() => removeTax(index)}
-                      className="h-10 w-10 mt-6"
-                    >
-                      <span className="text-lg">×</span>
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Navigation Buttons */}
         <div className="pt-4 pb-8 space-y-3">
@@ -451,8 +467,17 @@ export default function CreateProjectForm() {
             onClick={handleContinue}
             className="w-full h-12 rounded-xl text-base font-semibold"
           >
-            Continue to Share Setup
-            <ArrowRight className="ml-2 h-5 w-5" />
+            {step < 4 ? (
+              <>
+                Next
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </>
+            ) : (
+              <>
+                Continue to Share Setup
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </>
+            )}
           </Button>
           <Button
             onClick={handleBack}
@@ -460,7 +485,7 @@ export default function CreateProjectForm() {
             className="w-full h-11 rounded-xl"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            {step === 0 ? "Back" : "Previous"}
           </Button>
         </div>
       </div>
