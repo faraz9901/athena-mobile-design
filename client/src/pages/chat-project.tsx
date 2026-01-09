@@ -7,7 +7,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Users, Send, Flag, Calendar, ClipboardList } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ArrowLeft, Users, Send, Flag, Calendar, ClipboardList, MoreVertical } from "lucide-react";
 import { useLocation, useRoute } from "wouter";
 
 const projects = [
@@ -96,6 +102,7 @@ export default function ChatProject() {
     const [taskDueDate, setTaskDueDate] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [assignedTo, setAssignedTo] = useState("John Doe");
+    const [taskSourceMessage, setTaskSourceMessage] = useState<ChatMessage | null>(null);
 
     const activeMessages = project ? messagesByProject[project.id] || [] : [];
 
@@ -127,6 +134,22 @@ export default function ChatProject() {
         setTaskPriority("Medium");
         setTaskDueDate("");
         setTaskDescription("");
+        setTaskSourceMessage(null);
+    };
+
+    const handleCreateTaskFromMessage = (msg: ChatMessage) => {
+        setTaskSourceMessage(msg);
+
+        if (!taskTitle.trim()) {
+            setTaskTitle("");
+        }
+
+        if (!taskDescription.trim()) {
+            const base = msg.text.length > 120 ? msg.text.slice(0, 117) + "..." : msg.text;
+            setTaskDescription(`From chat: "${base}"`);
+        }
+
+        setShowTaskComposer(true);
     };
 
     const handleMockCreateTask = () => {
@@ -318,8 +341,7 @@ export default function ChatProject() {
                     {activeMessages.map((msg) => (
                         <div
                             key={msg.id}
-                            className={`flex items-end gap-2 ${msg.fromMe ? "justify-end" : "justify-start"
-                                }`}
+                            className={`group flex items-end gap-2 ${msg.fromMe ? "justify-end" : "justify-start"}`}
                         >
                             <div
                                 className={`relative max-w-[75%] px-3 py-2 text-xs leading-snug shadow-sm ${msg.fromMe
@@ -341,6 +363,27 @@ export default function ChatProject() {
                                 <span className="mt-1 block text-[9px] opacity-60 text-right">
                                     {msg.time}
                                 </span>
+
+                                {msg.fromMe && (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button
+                                                type="button"
+                                                className="absolute top-5 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-muted-background/80 hover:text-white"
+                                            >
+                                                <MoreVertical className="h-3.5 w-3.5" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" sideOffset={4}>
+                                            <DropdownMenuItem
+                                                className="text-xs"
+                                                onClick={() => handleCreateTaskFromMessage(msg)}
+                                            >
+                                                Add task
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )}
                             </div>
                         </div>
                     ))}

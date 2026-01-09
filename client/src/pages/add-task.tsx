@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Calendar, Flag, FolderKanban } from "lucide-react";
+import { ArrowLeft, Calendar, Flag, FolderKanban, Users } from "lucide-react";
 import { useLocation } from "wouter";
 
 const mockProjects = [
@@ -22,6 +22,7 @@ export default function AddTask() {
     const [priority, setPriority] = useState("Medium");
     const [dueDate, setDueDate] = useState("");
     const [description, setDescription] = useState("");
+    const [assignedTo, setAssignedTo] = useState("John Doe");
 
     const handleSave = () => {
         // Mock-only: in a real app this would POST to backend
@@ -109,6 +110,25 @@ export default function AddTask() {
                                         maxLength={10}
                                     />
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-3">
+                            <div className="space-y-2">
+                                <Label className="text-xs flex items-center gap-1">
+                                    <Users className="h-3 w-3" />
+                                    Assign To
+                                </Label>
+                                <Select value={assignedTo} onValueChange={setAssignedTo}>
+                                    <SelectTrigger className="h-11 rounded-xl text-sm">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="John Doe">John Doe</SelectItem>
+                                        <SelectItem value="Jane Doe">Jane Doe</SelectItem>
+                                        <SelectItem value="Mark Doe">Mark Doe</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 
